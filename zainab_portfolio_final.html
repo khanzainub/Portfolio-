@@ -1,0 +1,3085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Zainab Khan — Environmental Geographer and Geospatial Researcher specialising in climate change, natural hazards, spatial analysis, GIS, remote sensing and geospatial AI."
+  >
+
+  <title>
+    Zainab Khan | Environmental Geographer & Geospatial Researcher
+  </title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+
+    :root{
+      --navy:#10283a;
+      --navy-dark:#0b1d2b;
+      --navy-soft:#17384d;
+
+      --green:#4c7b72;
+      --green-dark:#325e56;
+      --green-soft:#e8f0ee;
+
+      --rust:#a65f43;
+
+      --background:#f7f8f8;
+      --surface:#ffffff;
+      --surface-alt:#f0f3f4;
+
+      --text:#1a2731;
+      --muted:#65727c;
+      --border:#dfe4e6;
+
+      --white:#ffffff;
+
+      --max-width:1180px;
+
+      --shadow:
+        0 12px 35px rgba(16,40,58,.07);
+
+      --radius:8px;
+    }
+
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+
+    html{
+      scroll-behavior:smooth;
+      scroll-padding-top:82px;
+    }
+
+
+    body{
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background:var(--background);
+      color:var(--text);
+      line-height:1.7;
+    }
+
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+
+    button,
+    input,
+    textarea{
+      font:inherit;
+    }
+
+
+    .container{
+      width:min(92%,var(--max-width));
+      margin-inline:auto;
+    }
+
+
+    /* =========================
+       NAVIGATION
+       ========================= */
+
+    .site-nav{
+      position:sticky;
+      top:0;
+      z-index:100;
+
+      background:
+        rgba(255,255,255,.96);
+
+      backdrop-filter:blur(14px);
+
+      border-bottom:
+        1px solid var(--border);
+    }
+
+
+    .nav-inner{
+      min-height:72px;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      gap:30px;
+    }
+
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+
+      font-size:.92rem;
+      font-weight:700;
+
+      letter-spacing:.10em;
+      text-transform:uppercase;
+
+      color:var(--navy);
+    }
+
+
+    .brand-mark{
+      width:8px;
+      height:32px;
+      background:var(--green);
+    }
+
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:24px;
+
+      color:#53616b;
+
+      font-size:.82rem;
+      font-weight:600;
+    }
+
+
+    .nav-links a{
+      transition:
+        color .18s ease;
+    }
+
+
+    .nav-links a:hover{
+      color:var(--green-dark);
+    }
+
+
+    .menu-button{
+      display:none;
+
+      width:42px;
+      height:42px;
+
+      border:
+        1px solid var(--border);
+
+      background:var(--surface);
+
+      color:var(--navy);
+
+      cursor:pointer;
+    }
+
+
+    /* =========================
+       HERO
+       ========================= */
+
+    .hero{
+      background:
+        linear-gradient(
+          135deg,
+          var(--navy-dark),
+          var(--navy)
+        );
+
+      color:var(--white);
+
+      padding:
+        105px 0 90px;
+    }
+
+
+    .hero-grid{
+      display:grid;
+
+      grid-template-columns:
+        minmax(0,1.5fr)
+        minmax(300px,.65fr);
+
+      gap:75px;
+
+      align-items:center;
+    }
+
+
+    .eyebrow{
+      margin-bottom:20px;
+
+      color:#9ec7bf;
+
+      font-size:.74rem;
+      font-weight:700;
+
+      text-transform:uppercase;
+
+      letter-spacing:.16em;
+    }
+
+
+    .hero h1{
+      max-width:780px;
+
+      margin-bottom:24px;
+
+      font-family:
+        "Source Serif 4",
+        Georgia,
+        serif;
+
+      font-size:
+        clamp(
+          3.8rem,
+          8vw,
+          6.5rem
+        );
+
+      line-height:.92;
+
+      font-weight:600;
+
+      letter-spacing:-.045em;
+    }
+
+
+    .hero h1 span{
+      display:block;
+      color:#a9cec7;
+    }
+
+
+    .hero-intro{
+      max-width:790px;
+
+      color:#d5dee3;
+
+      font-size:
+        clamp(
+          1.02rem,
+          2vw,
+          1.17rem
+        );
+    }
+
+
+    .hero-links{
+      margin-top:34px;
+
+      display:flex;
+      flex-wrap:wrap;
+
+      gap:11px;
+    }
+
+
+    .button{
+      display:inline-flex;
+
+      align-items:center;
+      justify-content:center;
+
+      min-height:45px;
+
+      padding:11px 18px;
+
+      border-radius:5px;
+
+      border:
+        1px solid transparent;
+
+      font-size:.84rem;
+      font-weight:700;
+
+      transition:
+        background .18s ease,
+        border-color .18s ease,
+        transform .18s ease;
+    }
+
+
+    .button:hover{
+      transform:translateY(-1px);
+    }
+
+
+    .button-primary{
+      background:#8ebdb5;
+      color:#0b2925;
+    }
+
+
+    .button-primary:hover{
+      background:#a4ccc5;
+    }
+
+
+    .button-outline-light{
+      border-color:
+        rgba(255,255,255,.28);
+
+      color:#edf4f5;
+
+      background:
+        rgba(255,255,255,.03);
+    }
+
+
+    .button-outline-light:hover{
+      border-color:
+        rgba(255,255,255,.55);
+    }
+
+
+    .profile-panel{
+      border:
+        1px solid
+        rgba(255,255,255,.14);
+
+      background:
+        rgba(255,255,255,.035);
+
+      padding:30px;
+
+      border-radius:6px;
+    }
+
+
+    .profile-panel-title{
+      color:#91bcb5;
+
+      font-size:.72rem;
+      font-weight:700;
+
+      letter-spacing:.14em;
+      text-transform:uppercase;
+
+      margin-bottom:22px;
+    }
+
+
+    .profile-item{
+      padding:17px 0;
+
+      border-bottom:
+        1px solid
+        rgba(255,255,255,.10);
+    }
+
+
+    .profile-item:first-of-type{
+      padding-top:0;
+    }
+
+
+    .profile-item:last-child{
+      border-bottom:none;
+      padding-bottom:0;
+    }
+
+
+    .profile-item strong{
+      display:block;
+
+      margin-bottom:3px;
+
+      color:#ffffff;
+
+      font-size:.94rem;
+      font-weight:600;
+    }
+
+
+    .profile-item span{
+      color:#aebdc5;
+
+      font-size:.83rem;
+    }
+
+
+    /* =========================
+       GENERAL SECTIONS
+       ========================= */
+
+    section.content-section{
+      padding:95px 0;
+    }
+
+
+    section.content-section + section.content-section{
+      border-top:
+        1px solid var(--border);
+    }
+
+
+    .section-heading{
+      display:grid;
+
+      grid-template-columns:
+        minmax(250px,.65fr)
+        minmax(0,1fr);
+
+      gap:65px;
+
+      align-items:start;
+
+      margin-bottom:46px;
+    }
+
+
+    .section-kicker{
+      color:var(--green-dark);
+
+      font-size:.73rem;
+      font-weight:700;
+
+      letter-spacing:.15em;
+
+      text-transform:uppercase;
+
+      margin-bottom:12px;
+    }
+
+
+    .section-heading h2{
+      font-family:
+        "Source Serif 4",
+        Georgia,
+        serif;
+
+      font-size:
+        clamp(
+          2.35rem,
+          5vw,
+          3.45rem
+        );
+
+      line-height:1.05;
+
+      color:var(--navy);
+
+      font-weight:600;
+
+      letter-spacing:-.025em;
+    }
+
+
+    .section-heading p{
+      max-width:680px;
+
+      color:var(--muted);
+
+      font-size:.98rem;
+
+      padding-top:6px;
+    }
+
+
+    /* =========================
+       ABOUT
+       ========================= */
+
+    .about-grid{
+      display:grid;
+
+      grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+      gap:60px;
+    }
+
+
+    .about-grid p{
+      color:#53616b;
+
+      font-size:1rem;
+
+      margin-bottom:18px;
+    }
+
+
+    .about-grid p:last-child{
+      margin-bottom:0;
+    }
+
+
+    /* =========================
+       RESEARCH FOCUS
+       ========================= */
+
+    .research-grid{
+      display:grid;
+
+      grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+      border-top:
+        1px solid var(--border);
+
+      border-left:
+        1px solid var(--border);
+    }
+
+
+    .research-item{
+      background:var(--surface);
+
+      padding:30px 28px;
+
+      border-right:
+        1px solid var(--border);
+
+      border-bottom:
+        1px solid var(--border);
+
+      min-height:220px;
+    }
+
+
+    .research-number{
+      display:block;
+
+      color:var(--green);
+
+      font-size:.72rem;
+      font-weight:700;
+
+      letter-spacing:.12em;
+
+      margin-bottom:25px;
+    }
+
+
+    .research-item h3{
+      color:var(--navy);
+
+      font-size:1.04rem;
+
+      margin-bottom:11px;
+    }
+
+
+    .research-item p{
+      color:var(--muted);
+
+      font-size:.88rem;
+    }
+
+
+    /* =========================
+       PROJECTS
+       ========================= */
+
+    .project-grid{
+      display:grid;
+
+      grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+      gap:20px;
+    }
+
+
+    .project-card{
+      background:var(--surface);
+
+      border:
+        1px solid var(--border);
+
+      border-radius:var(--radius);
+
+      padding:30px;
+
+      min-height:365px;
+
+      display:flex;
+      flex-direction:column;
+
+      box-shadow:
+        0 4px 16px
+        rgba(16,40,58,.025);
+    }
+
+
+    .project-type{
+      color:var(--green-dark);
+
+      font-size:.68rem;
+      font-weight:700;
+
+      text-transform:uppercase;
+
+      letter-spacing:.12em;
+
+      margin-bottom:17px;
+    }
+
+
+    .project-card h3{
+      margin-bottom:13px;
+
+      font-family:
+        "Source Serif 4",
+        Georgia,
+        serif;
+
+      font-size:2rem;
+
+      line-height:1.05;
+
+      color:var(--navy);
+    }
+
+
+    .project-card p{
+      color:var(--muted);
+
+      font-size:.9rem;
+
+      flex:1;
+    }
+
+
+    .project-meta{
+      display:flex;
+      gap:7px;
+
+      flex-wrap:wrap;
+
+      margin:
+        23px 0 20px;
+    }
+
+
+    .meta-chip{
+      padding:5px 9px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius:4px;
+
+      background:
+        var(--surface-alt);
+
+      color:#66737c;
+
+      font-size:.67rem;
+      font-weight:600;
+    }
+
+
+    .project-link{
+      display:inline-flex;
+
+      align-items:center;
+
+      width:max-content;
+
+      gap:7px;
+
+      color:var(--green-dark);
+
+      font-size:.82rem;
+      font-weight:700;
+    }
+
+
+    .project-link:hover{
+      text-decoration:underline;
+    }
+
+
+    /* =========================
+       MEDIA
+       ========================= */
+
+    .media-section{
+      background:#edf1f2;
+    }
+
+
+    .media-grid{
+      display:grid;
+
+      grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+      gap:22px;
+    }
+
+
+    .media-card{
+      display:flex;
+      flex-direction:column;
+
+      min-height:350px;
+
+      padding:32px;
+
+      background:var(--surface);
+
+      border:
+        1px solid #d7dee1;
+
+      border-top:
+        4px solid var(--green);
+
+      transition:
+        box-shadow .2s ease,
+        transform .2s ease;
+    }
+
+
+    .media-card:hover{
+      transform:translateY(-2px);
+      box-shadow:var(--shadow);
+    }
+
+
+    .media-source{
+      display:flex;
+
+      justify-content:space-between;
+      align-items:center;
+
+      gap:20px;
+
+      margin-bottom:27px;
+    }
+
+
+    .publication-name{
+      color:var(--navy);
+
+      font-size:.76rem;
+      font-weight:700;
+
+      letter-spacing:.10em;
+
+      text-transform:uppercase;
+    }
+
+
+    .media-date{
+      color:#7c878f;
+
+      font-size:.75rem;
+    }
+
+
+    .media-card h3{
+      margin-bottom:17px;
+
+      color:var(--navy);
+
+      font-family:
+        "Source Serif 4",
+        Georgia,
+        serif;
+
+      font-size:
+        clamp(
+          1.35rem,
+          3vw,
+          1.7rem
+        );
+
+      line-height:1.28;
+
+      font-weight:600;
+    }
+
+
+    .media-card p{
+      color:var(--muted);
+
+      font-size:.89rem;
+
+      margin-bottom:25px;
+    }
+
+
+    .media-link{
+      margin-top:auto;
+
+      display:inline-flex;
+      align-items:center;
+
+      gap:8px;
+
+      color:var(--green-dark);
+
+      font-size:.82rem;
+      font-weight:700;
+    }
+
+
+    .media-link:hover{
+      text-decoration:underline;
+    }
+
+
+    /* =========================
+       FELLOWSHIPS
+       ========================= */
+
+    .fellowship-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:20px;
+    }
+
+
+    .fellowship-card{
+      position:relative;
+
+      min-height:245px;
+
+      padding:30px;
+
+      background:var(--surface);
+
+      border:1px solid var(--border);
+
+      border-top:3px solid var(--green);
+
+      border-radius:var(--radius);
+    }
+
+
+    .fellowship-year{
+      margin-bottom:24px;
+
+      color:var(--green-dark);
+
+      font-size:.74rem;
+
+      font-weight:700;
+
+      letter-spacing:.13em;
+
+      text-transform:uppercase;
+    }
+
+
+    .fellowship-card h3{
+      margin-bottom:13px;
+
+      color:var(--navy);
+
+      font-family:
+        "Source Serif 4",
+        Georgia,
+        serif;
+
+      font-size:1.45rem;
+
+      line-height:1.25;
+
+      font-weight:600;
+    }
+
+
+    .fellowship-card p{
+      color:var(--muted);
+
+      font-size:.88rem;
+    }
+
+
+    /* =========================
+       PUBLICATIONS
+       ========================= */
+
+    .publication-list{
+      display:grid;
+      gap:10px;
+    }
+
+
+    .publication-item{
+      background:var(--surface);
+
+      border:
+        1px solid var(--border);
+
+      border-left:
+        3px solid transparent;
+
+      padding:21px 23px;
+
+      display:grid;
+
+      grid-template-columns:
+        minmax(0,1fr)
+        auto;
+
+      gap:25px;
+
+      align-items:center;
+
+      transition:
+        border-color .18s ease,
+        background .18s ease;
+    }
+
+
+    .publication-item:hover{
+      border-left-color:var(--green);
+
+      background:#fcfdfd;
+    }
+
+
+    .publication-title{
+      color:#24333d;
+
+      font-size:.93rem;
+      font-weight:600;
+
+      line-height:1.5;
+    }
+
+
+    .publication-meta{
+      color:#7b878f;
+
+      font-size:.75rem;
+
+      margin-top:6px;
+    }
+
+
+    .publication-arrow{
+      color:var(--green);
+      font-size:1.1rem;
+    }
+
+
+    /* =========================
+       EXPERIENCE
+       ========================= */
+
+    .experience-list{
+      max-width:930px;
+
+      border-left:
+        1px solid #cfd7da;
+
+      margin-left:5px;
+
+      padding-left:35px;
+    }
+
+
+    .experience-item{
+      position:relative;
+
+      padding-bottom:42px;
+    }
+
+
+    .experience-item:last-child{
+      padding-bottom:0;
+    }
+
+
+    .experience-item::before{
+      content:"";
+
+      position:absolute;
+
+      width:11px;
+      height:11px;
+
+      left:-41px;
+      top:8px;
+
+      background:var(--green);
+
+      border-radius:50%;
+
+      box-shadow:
+        0 0 0 5px
+        var(--background);
+    }
+
+
+    .experience-item h3{
+      color:var(--navy);
+
+      font-size:1rem;
+
+      margin-bottom:4px;
+    }
+
+
+    .experience-label{
+      color:var(--green-dark);
+
+      font-size:.76rem;
+      font-weight:700;
+
+      margin-bottom:8px;
+    }
+
+
+    .experience-item p{
+      max-width:760px;
+
+      color:var(--muted);
+
+      font-size:.9rem;
+    }
+
+
+    /* =========================
+       METHODS
+       ========================= */
+
+    .skills{
+      display:flex;
+      flex-wrap:wrap;
+
+      gap:9px;
+    }
+
+
+    .skill{
+      padding:8px 12px;
+
+      border:
+        1px solid #d5dcdf;
+
+      background:var(--surface);
+
+      border-radius:4px;
+
+      color:#4e5d67;
+
+      font-size:.78rem;
+      font-weight:500;
+    }
+
+
+    /* =========================
+       CONTACT
+       ========================= */
+
+    .contact-section{
+      background:var(--navy);
+      color:white;
+    }
+
+
+    .contact-panel{
+      display:grid;
+
+      grid-template-columns:
+        minmax(0,1.15fr)
+        minmax(320px,.85fr);
+
+      gap:70px;
+
+      align-items:start;
+    }
+
+
+    .contact-section .section-kicker{
+      color:#9ac5bd;
+    }
+
+
+    .contact-section h2{
+      max-width:600px;
+
+      color:white;
+
+      font-family:
+        "Source Serif 4",
+        Georgia,
+        serif;
+
+      font-size:
+        clamp(
+          2.7rem,
+          5vw,
+          4.2rem
+        );
+
+      line-height:1;
+
+      font-weight:600;
+
+      margin-bottom:20px;
+    }
+
+
+    .contact-section p{
+      max-width:630px;
+
+      color:#c5d0d5;
+    }
+
+
+    .contact-links{
+      border-top:
+        1px solid
+        rgba(255,255,255,.18);
+    }
+
+
+    .contact-link{
+      display:flex;
+
+      align-items:center;
+      justify-content:space-between;
+
+      gap:20px;
+
+      padding:15px 0;
+
+      border-bottom:
+        1px solid
+        rgba(255,255,255,.18);
+
+      color:#e3eaed;
+
+      font-size:.86rem;
+    }
+
+
+    .contact-link:hover{
+      color:#a9d0c8;
+    }
+
+
+    /* =========================
+       FOOTER
+       ========================= */
+
+    footer{
+      background:#091a27;
+
+      color:#82939e;
+
+      padding:28px 0;
+    }
+
+
+    .footer-inner{
+      display:flex;
+
+      justify-content:space-between;
+
+      gap:25px;
+
+      font-size:.73rem;
+    }
+
+
+    /* =========================
+       ACCESSIBILITY
+       ========================= */
+
+    :focus-visible{
+      outline:
+        3px solid
+        #a86b51;
+
+      outline-offset:4px;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+       ========================= */
+
+    @media(max-width:960px){
+
+      .hero-grid{
+        grid-template-columns:1fr;
+        gap:55px;
+      }
+
+
+      .profile-panel{
+        max-width:650px;
+      }
+
+
+      .section-heading{
+        grid-template-columns:1fr;
+        gap:20px;
+      }
+
+
+      .research-grid,
+      .project-grid{
+        grid-template-columns:
+          repeat(2,minmax(0,1fr));
+      }
+
+
+      .project-card:last-child{
+        grid-column:1 / -1;
+        min-height:auto;
+      }
+
+
+      .fellowship-grid{
+        grid-template-columns:
+          repeat(2,minmax(0,1fr));
+      }
+
+
+      .fellowship-card:last-child{
+        grid-column:1 / -1;
+      }
+
+
+      .contact-panel{
+        grid-template-columns:1fr;
+        gap:45px;
+      }
+
+    }
+
+
+    @media(max-width:760px){
+
+      .menu-button{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+      }
+
+
+      .nav-links{
+        position:absolute;
+
+        left:0;
+        right:0;
+
+        top:72px;
+
+        background:white;
+
+        border-bottom:
+          1px solid var(--border);
+
+        padding:
+          18px 4% 24px;
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:5px;
+
+        display:none;
+      }
+
+
+      .nav-links.open{
+        display:flex;
+      }
+
+
+      .nav-links a{
+        width:100%;
+
+        padding:
+          10px 0;
+      }
+
+
+      .hero{
+        padding:
+          78px 0 70px;
+      }
+
+
+      .about-grid,
+      .media-grid{
+        grid-template-columns:1fr;
+      }
+
+
+      .research-grid,
+      .project-grid,
+      .fellowship-grid{
+        grid-template-columns:1fr;
+      }
+
+
+      .project-card:last-child,
+      .fellowship-card:last-child{
+        grid-column:auto;
+      }
+
+
+      section.content-section{
+        padding:
+          72px 0;
+      }
+
+    }
+
+
+    @media(max-width:520px){
+
+      .hero h1{
+        font-size:3.5rem;
+      }
+
+
+      .hero-links{
+        flex-direction:column;
+        align-items:stretch;
+      }
+
+
+      .button{
+        width:100%;
+      }
+
+
+      .profile-panel{
+        padding:24px;
+      }
+
+
+      .research-item,
+      .project-card,
+      .media-card,
+      .fellowship-card{
+        padding:24px;
+      }
+
+
+      .publication-item{
+        grid-template-columns:1fr;
+        gap:9px;
+      }
+
+
+      .publication-arrow{
+        display:none;
+      }
+
+
+      .footer-inner{
+        display:block;
+      }
+
+
+      .footer-inner div + div{
+        margin-top:7px;
+      }
+
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVIGATION
+     ========================= -->
+
+<nav class="site-nav">
+
+  <div class="container nav-inner">
+
+    <a
+      class="brand"
+      href="#top"
+    >
+      <span class="brand-mark"></span>
+      Zainab Khan
+    </a>
+
+
+    <button
+      class="menu-button"
+      id="menuButton"
+      type="button"
+      aria-label="Open navigation menu"
+      aria-expanded="false"
+    >
+      ☰
+    </button>
+
+
+    <div
+      class="nav-links"
+      id="navLinks"
+    >
+
+      <a href="#about">
+        About
+      </a>
+
+      <a href="#research">
+        Research
+      </a>
+
+      <a href="#projects">
+        Projects
+      </a>
+
+      <a href="#media">
+        Media
+      </a>
+
+      <a href="#fellowships">
+        Fellowships
+      </a>
+
+      <a href="#papers">
+        Publications
+      </a>
+
+      <a href="#experience">
+        Experience
+      </a>
+
+      <a href="#contact">
+        Contact
+      </a>
+
+    </div>
+
+  </div>
+
+</nav>
+
+
+
+<main id="top">
+
+
+<!-- =========================
+     HERO
+     ========================= -->
+
+<section class="hero">
+
+  <div class="container hero-grid">
+
+
+    <div>
+
+      <div class="eyebrow">
+        Environmental Geography · Geospatial Science · Climate Change · Natural Hazards
+      </div>
+
+
+      <h1>
+        Zainab
+        <span>Khan</span>
+      </h1>
+
+
+      <p class="hero-intro">
+
+        Environmental Geographer and Geospatial Researcher working on
+        climate change, natural hazards and spatial analysis through GIS,
+        remote sensing and computational approaches including artificial
+        intelligence, machine learning and deep learning.
+
+      </p>
+
+
+      <div class="hero-links">
+
+        <a
+          class="button button-primary"
+          href="#research"
+        >
+          Explore Research
+        </a>
+
+
+        <a
+          class="button button-outline-light"
+          href="#papers"
+        >
+          Publications
+        </a>
+
+
+        <a
+          class="button button-outline-light"
+          href="#projects"
+        >
+          Selected Projects
+        </a>
+
+
+        <a
+          class="button button-outline-light"
+          href="#media"
+        >
+          Media Coverage
+        </a>
+
+      </div>
+
+    </div>
+
+
+
+    <aside class="profile-panel">
+
+      <div class="profile-panel-title">
+        Research Profile
+      </div>
+
+
+      <div class="profile-item">
+
+        <strong>
+          PhD · Environmental Geography
+        </strong>
+
+        <span>
+          Himalayan ecosystems, climate change and environmental analysis
+        </span>
+
+      </div>
+
+
+      <div class="profile-item">
+
+        <strong>
+          2 Postdoctoral Research Positions
+        </strong>
+
+        <span>
+          IIT Roorkee · Aligarh Muslim University
+        </span>
+
+      </div>
+
+
+      <div class="profile-item">
+
+        <strong>
+          15+ Research Papers
+        </strong>
+
+        <span>
+          Climate change, hazards, remote sensing and spatial analysis
+        </span>
+
+      </div>
+
+
+      <div class="profile-item">
+
+        <strong>
+          Geospatial Platforms
+        </strong>
+
+        <span>
+          HazWatch · WeatherScope
+        </span>
+
+      </div>
+
+
+      <div class="profile-item">
+
+        <strong>
+          ORCID
+        </strong>
+
+        <span>
+          <a
+            href="https://orcid.org/0000-0002-6072-521X"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            0000-0002-6072-521X ↗
+          </a>
+        </span>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     ABOUT
+     ========================= -->
+
+<section
+  class="content-section"
+  id="about"
+>
+
+  <div class="container">
+
+    <div class="section-heading">
+
+      <div>
+
+        <div class="section-kicker">
+          Profile
+        </div>
+
+        <h2>
+          About
+        </h2>
+
+      </div>
+
+
+      <p>
+
+        My work centres on climate change, natural hazards and spatial
+        analysis, with geospatial science providing the common framework
+        across diverse environmental research problems.
+
+      </p>
+
+    </div>
+
+
+    <div class="about-grid">
+
+      <div>
+
+        <p>
+
+          I am an Environmental Geographer and Geospatial Researcher with
+          research interests spanning climate change, natural hazards,
+          environmental systems and spatial analysis. My doctoral research
+          focused on Himalayan lake ecosystems, phytoplankton dynamics and
+          climate-related environmental change.
+
+        </p>
+
+
+        <p>
+
+          A central part of my work is the application of geospatial
+          technologies to understand complex environmental and spatial
+          processes. I use GIS, satellite remote sensing, spatial modelling
+          and statistical approaches together with artificial intelligence,
+          machine learning and deep learning where appropriate.
+
+        </p>
+
+      </div>
+
+
+      <div>
+
+        <p>
+
+          My research has addressed diverse problems including landslide
+          susceptibility, forest-fire risk, land-surface-temperature change,
+          groundwater mapping, carbon sequestration, ecological change and
+          climate-sensitive Himalayan environments.
+
+        </p>
+
+
+        <p>
+
+          My broader interests include climate-risk assessment, multi-hazard
+          analysis, geospatial AI, remote-sensing applications and the
+          development of spatial tools and data-driven systems for
+          environmental research. Environmental monitoring, field
+          observations, sensors and citizen-generated data form part of this
+          broader geospatial research framework where relevant.
+
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     RESEARCH
+     ========================= -->
+
+<section
+  class="content-section"
+  id="research"
+>
+
+  <div class="container">
+
+    <div class="section-heading">
+
+      <div>
+
+        <div class="section-kicker">
+          Research
+        </div>
+
+        <h2>
+          Research Focus
+        </h2>
+
+      </div>
+
+
+      <p>
+
+        My research focuses on climate change, natural hazards and spatial
+        analysis, using GIS, remote sensing, spatial modelling and
+        computational methods including artificial intelligence, machine
+        learning and deep learning.
+
+      </p>
+
+    </div>
+
+
+    <div class="research-grid">
+
+
+      <article class="research-item">
+
+        <span class="research-number">
+          01
+        </span>
+
+        <h3>
+          Climate Change & Environmental Change
+        </h3>
+
+        <p>
+
+          Climate trends, land-surface temperature, land-use change,
+          ecological systems, water environments and climate-related
+          environmental vulnerability.
+
+        </p>
+
+      </article>
+
+
+
+      <article class="research-item">
+
+        <span class="research-number">
+          02
+        </span>
+
+        <h3>
+          Natural Hazards
+        </h3>
+
+        <p>
+
+          Landslides, floods, forest fires and Himalayan hazard
+          processes, including susceptibility, exposure and risk assessment.
+
+        </p>
+
+      </article>
+
+
+
+      <article class="research-item">
+
+        <span class="research-number">
+          03
+        </span>
+
+        <h3>
+          GIS, Remote Sensing & Spatial Analysis
+        </h3>
+
+        <p>
+
+          Geospatial modelling, satellite remote sensing, spatial statistics,
+          mapping and analytical workflows for environmental and hazard research.
+
+        </p>
+
+      </article>
+
+
+
+      <article class="research-item">
+
+        <span class="research-number">
+          04
+        </span>
+
+        <h3>
+          Geospatial AI
+        </h3>
+
+        <p>
+
+          Artificial intelligence, machine learning and deep learning for
+          classification, prediction, susceptibility analysis and spatial
+          decision support.
+
+        </p>
+
+      </article>
+
+
+
+      <article class="research-item">
+
+        <span class="research-number">
+          05
+        </span>
+
+        <h3>
+          Spatial & Environmental Data
+        </h3>
+
+        <p>
+
+          Integration of satellite observations, field measurements,
+          environmental monitoring, sensors, UAV data and other spatial
+          datasets for geospatial analysis.
+
+        </p>
+
+      </article>
+
+
+
+      <article class="research-item">
+
+        <span class="research-number">
+          06
+        </span>
+
+        <h3>
+          Himalayan Systems
+        </h3>
+
+        <p>
+
+          Mountain ecosystems, hydrology, climate-sensitive landscapes
+          and changing environmental processes across the Himalayas.
+
+        </p>
+
+      </article>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     PROJECTS
+     ========================= -->
+
+<section
+  class="content-section"
+  id="projects"
+>
+
+  <div class="container">
+
+    <div class="section-heading">
+
+      <div>
+
+        <div class="section-kicker">
+          Applied Work
+        </div>
+
+        <h2>
+          Selected Projects
+        </h2>
+
+      </div>
+
+
+      <p>
+
+        Alongside academic research, I develop geospatial and
+        environmental tools designed to make scientific information
+        accessible and practically useful.
+
+      </p>
+
+    </div>
+
+
+    <div class="project-grid">
+
+
+      <!-- HAZWATCH -->
+
+      <article class="project-card">
+
+        <div class="project-type">
+          Founder · Citizen Science · Geospatial Platform
+        </div>
+
+        <h3>
+          HazWatch
+        </h3>
+
+        <p>
+
+          A citizen-powered multi-hazard reporting and geospatial
+          mapping platform for India. HazWatch supports current and
+          retrospective hazard reporting, GPS and map-based incident
+          documentation, field photographs, hazard visualisation and
+          controlled access to anonymised research datasets.
+
+        </p>
+
+
+        <div class="project-meta">
+
+          <span class="meta-chip">
+            Android
+          </span>
+
+          <span class="meta-chip">
+            GIS
+          </span>
+
+          <span class="meta-chip">
+            Citizen Science
+          </span>
+
+          <span class="meta-chip">
+            Multi-Hazard
+          </span>
+
+        </div>
+
+
+        <a
+          class="project-link"
+          href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on Google Play
+          <span>↗</span>
+        </a>
+
+      </article>
+
+
+
+      <!-- WEATHER SCOPE -->
+
+      <article class="project-card">
+
+        <div class="project-type">
+          Global Weather & Atmospheric Explorer
+        </div>
+
+        <h3>
+          WeatherScope
+        </h3>
+
+        <p>
+
+          An interactive global weather and atmospheric explorer that
+          combines location-based weather conditions, annual weather
+          patterns, wind, air quality, solar radiation, elevation,
+          astronomical information and short-term forecasts within a
+          map-based interface.
+
+        </p>
+
+
+        <div class="project-meta">
+
+          <span class="meta-chip">
+            Web App
+          </span>
+
+          <span class="meta-chip">
+            Leaflet
+          </span>
+
+          <span class="meta-chip">
+            Weather Data
+          </span>
+
+          <span class="meta-chip">
+            Visualisation
+          </span>
+
+        </div>
+
+
+        <a
+          class="project-link"
+          href="https://himalayanweather.netlify.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open Live Application
+          <span>↗</span>
+        </a>
+
+      </article>
+
+
+
+      <!-- RESEARCH DIRECTION -->
+
+      <article class="project-card">
+
+        <div class="project-type">
+          Ongoing Research Direction
+        </div>
+
+        <h3>
+          Climate Risk & Himalayan Hazards
+        </h3>
+
+        <p>
+
+          Developing integrated research approaches for Himalayan
+          multi-hazard assessment, including hydrological extremes,
+          flash floods, landslide processes, rainfall, snowmelt,
+          vegetation, terrain and changing climate conditions.
+
+        </p>
+
+
+        <div class="project-meta">
+
+          <span class="meta-chip">
+            Himalayas
+          </span>
+
+          <span class="meta-chip">
+            Floods
+          </span>
+
+          <span class="meta-chip">
+            Landslides
+          </span>
+
+          <span class="meta-chip">
+            Climate Risk
+          </span>
+
+        </div>
+
+
+        <a
+          class="project-link"
+          href="#papers"
+        >
+          Explore Related Publications
+          <span>→</span>
+        </a>
+
+      </article>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     MEDIA
+     ========================= -->
+
+<section
+  class="content-section media-section"
+  id="media"
+>
+
+  <div class="container">
+
+    <div class="section-heading">
+
+      <div>
+
+        <div class="section-kicker">
+          Research Impact
+        </div>
+
+        <h2>
+          Research in the Media
+        </h2>
+
+      </div>
+
+
+      <p>
+
+        Selected national media coverage highlighting findings from
+        my research on climate change and natural hazards in the
+        Himalayan region.
+
+      </p>
+
+    </div>
+
+
+    <div class="media-grid">
+
+
+      <a
+        class="media-card"
+        href="https://timesofindia.indiatimes.com/city/dehradun/kumaon-himalayas-to-face-alarming-rise-in-land-surface-temp-by-2030-study/amp_articleshow/118900954.cms"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div class="media-source">
+
+          <span class="publication-name">
+            The Times of India
+          </span>
+
+          <span class="media-date">
+            11 March 2025
+          </span>
+
+        </div>
+
+
+        <h3>
+
+          Kumaon Himalayas to face alarming rise in land surface
+          temp by 2030: Study
+
+        </h3>
+
+
+        <p>
+
+          Times of India coverage of research examining long-term
+          land-surface-temperature change in the Kumaon Himalayas
+          and projected warming patterns through 2030.
+
+        </p>
+
+
+        <span class="media-link">
+          Read coverage
+          <span>↗</span>
+        </span>
+
+      </a>
+
+
+
+      <a
+        class="media-card"
+        href="https://timesofindia.indiatimes.com/city/dehradun/himalayan-river-basins-face-escalating-landslide-threats-jhelum-most-vulnerable-warns-study/amp_articleshow/121298893.cms"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div class="media-source">
+
+          <span class="publication-name">
+            The Times of India
+          </span>
+
+          <span class="media-date">
+            20 May 2025
+          </span>
+
+        </div>
+
+
+        <h3>
+
+          Himalayan river basins face escalating landslide threats,
+          Jhelum most vulnerable, warns study
+
+        </h3>
+
+
+        <p>
+
+          National coverage of research assessing landslide susceptibility
+          and exposure across major Himalayan river basins using
+          machine learning and geospatial analysis.
+
+        </p>
+
+
+        <span class="media-link">
+          Read coverage
+          <span>↗</span>
+        </span>
+
+      </a>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     FELLOWSHIPS
+     ========================= -->
+
+<section
+  class="content-section"
+  id="fellowships"
+>
+
+  <div class="container">
+
+    <div class="section-heading">
+
+      <div>
+
+        <div class="section-kicker">
+          Academic Recognition
+        </div>
+
+        <h2>
+          Fellowships
+        </h2>
+
+      </div>
+
+
+      <p>
+
+        Selected doctoral and postdoctoral fellowships supporting
+        my academic and research development.
+
+      </p>
+
+    </div>
+
+
+    <div class="fellowship-grid">
+
+
+      <article class="fellowship-card">
+
+        <div class="fellowship-year">
+          2018
+        </div>
+
+        <h3>
+          Maulana Azad National Fellowship
+        </h3>
+
+        <p>
+          National research fellowship supporting doctoral research and
+          advanced academic training.
+        </p>
+
+      </article>
+
+
+      <article class="fellowship-card">
+
+        <div class="fellowship-year">
+          2023
+        </div>
+
+        <h3>
+          ICSSR Postdoctoral Fellowship
+        </h3>
+
+        <p>
+          Postdoctoral fellowship supporting advanced research in
+          geography, environmental studies and related social-science fields.
+        </p>
+
+      </article>
+
+
+      <article class="fellowship-card">
+
+        <div class="fellowship-year">
+          2025
+        </div>
+
+        <h3>
+          Chanakya Postdoctoral Fellowship
+        </h3>
+
+        <p>
+          IIT Tirupati
+        </p>
+
+      </article>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     PUBLICATIONS
+     ========================= -->
+
+<section
+  class="content-section"
+  id="papers"
+>
+
+  <div class="container">
+
+    <div class="section-heading">
+
+      <div>
+
+        <div class="section-kicker">
+          Publications
+        </div>
+
+        <h2>
+          Selected Publications
+        </h2>
+
+      </div>
+
+
+      <p>
+
+        Selected peer-reviewed research across climate change,
+        Himalayan environmental systems, remote sensing, natural
+        hazards and machine-learning applications.
+
+      </p>
+
+    </div>
+
+
+    <div class="publication-list">
+
+
+      <a
+        class="publication-item"
+        href="https://link.springer.com/article/10.1007/s41748-025-00863-0"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div>
+
+          <div class="publication-title">
+
+            Predicting Forest Fire Risk and Carbon Pool Vulnerability
+            in the Himalayas: A Machine Learning Approach
+
+          </div>
+
+          <div class="publication-meta">
+            2025 · Earth Systems and Environment · Springer
+          </div>
+
+        </div>
+
+        <span class="publication-arrow">
+          ↗
+        </span>
+
+      </a>
+
+
+
+      <a
+        class="publication-item"
+        href="https://link.springer.com/article/10.1007/s43832-025-00270-6"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div>
+
+          <div class="publication-title">
+
+            Analysing the physicochemical dynamics and biodiversity
+            patterns in Bhimtal, Nainital, and Sariyatal lakes
+
+          </div>
+
+          <div class="publication-meta">
+            2025 · Discover Water · Springer
+          </div>
+
+        </div>
+
+        <span class="publication-arrow">
+          ↗
+        </span>
+
+      </a>
+
+
+
+      <a
+        class="publication-item"
+        href="https://www.sciencedirect.com/science/article/abs/pii/S2352938524002908"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div>
+
+          <div class="publication-title">
+
+            Temporal Trends and Future Projections: Analysing Land
+            Surface Temperature in the Kumaun Himalayas using Spatial
+            Time Series Analysis
+
+          </div>
+
+          <div class="publication-meta">
+
+            2025 · Remote Sensing Applications:
+            Society and Environment · Elsevier
+
+          </div>
+
+        </div>
+
+        <span class="publication-arrow">
+          ↗
+        </span>
+
+      </a>
+
+
+
+      <a
+        class="publication-item"
+        href="https://link.springer.com/article/10.1007/s44288-024-00097-z"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div>
+
+          <div class="publication-title">
+
+            Analysing the potential impacts of land use land cover
+            (LULC) transformation on present and future carbon
+            sequestration capabilities in the central Himalayas
+
+          </div>
+
+          <div class="publication-meta">
+            2024 · Discover Geoscience · Springer
+          </div>
+
+        </div>
+
+        <span class="publication-arrow">
+          ↗
+        </span>
+
+      </a>
+
+
+
+      <a
+        class="publication-item"
+        href="https://link.springer.com/article/10.1007/s12524-023-01789-8"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div>
+
+          <div class="publication-title">
+
+            Comparing the Performance of Machine Learning Algorithms
+            for Groundwater Mapping in Delhi
+
+          </div>
+
+          <div class="publication-meta">
+
+            2024 · Journal of the Indian Society of Remote Sensing
+            · Springer
+
+          </div>
+
+        </div>
+
+        <span class="publication-arrow">
+          ↗
+        </span>
+
+      </a>
+
+
+
+      <a
+        class="publication-item"
+        href="https://link.springer.com/article/10.1007/s40808-022-01485-5"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div>
+
+          <div class="publication-title">
+
+            Predicting the effects of climate change on prospective
+            Banj oak (Quercus leucotrichophora) dispersal in Kumaun
+            region of Uttarakhand using machine learning algorithms
+
+          </div>
+
+          <div class="publication-meta">
+
+            2023 · Modeling Earth Systems and Environment · Springer
+
+          </div>
+
+        </div>
+
+        <span class="publication-arrow">
+          ↗
+        </span>
+
+      </a>
+
+
+
+      <a
+        class="publication-item"
+        href="https://www.researchgate.net/profile/Zainab-Khan-7"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div>
+
+          <div class="publication-title">
+
+            View complete publication profile
+
+          </div>
+
+          <div class="publication-meta">
+
+            ResearchGate · Zainab Khan
+
+          </div>
+
+        </div>
+
+        <span class="publication-arrow">
+          ↗
+        </span>
+
+      </a>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     EXPERIENCE
+     ========================= -->
+
+<section
+  class="content-section"
+  id="experience"
+>
+
+  <div class="container">
+
+    <div class="section-heading">
+
+      <div>
+
+        <div class="section-kicker">
+          Academic Path
+        </div>
+
+        <h2>
+          Research Experience
+        </h2>
+
+      </div>
+
+
+      <p>
+
+        Research experience spanning environmental geography,
+        climate-related hazards, geospatial analysis and
+        AI-enabled environmental research.
+
+      </p>
+
+    </div>
+
+
+    <div class="experience-list">
+
+
+      <article class="experience-item">
+
+        <h3>
+          Postdoctoral Research · IIT Roorkee
+        </h3>
+
+        <div class="experience-label">
+          Geospatial Engineering · AI · Crop Health · Remote Sensing
+        </div>
+
+        <p>
+
+          Worked on AI-based crop-health monitoring integrating
+          satellite observations, UAV imagery and PhenoCam data.
+
+        </p>
+
+      </article>
+
+
+
+      <article class="experience-item">
+
+        <h3>
+          Postdoctoral Research · Aligarh Muslim University
+        </h3>
+
+        <div class="experience-label">
+          Climate Change · Landslides · Himalayan Risk
+        </div>
+
+        <p>
+
+          Conducted research on climate-change impacts, landslide
+          susceptibility and environmental risk in the Himalayan region.
+
+        </p>
+
+      </article>
+
+
+
+      <article class="experience-item">
+
+        <h3>
+          PhD · Environmental Geography
+        </h3>
+
+        <div class="experience-label">
+          Himalayan Lakes · Phytoplankton · Climate Change
+        </div>
+
+        <p>
+
+          Doctoral research focused on Kumaon lake ecosystems,
+          phytoplankton dynamics and climate-sensitive environmental
+          processes.
+
+        </p>
+
+      </article>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     METHODS & SKILLS
+     ========================= -->
+
+<section
+  class="content-section"
+  id="skills"
+>
+
+  <div class="container">
+
+    <div class="section-heading">
+
+      <div>
+
+        <div class="section-kicker">
+          Technical Profile
+        </div>
+
+        <h2>
+          Methods & Skills
+        </h2>
+
+      </div>
+
+
+      <p>
+
+        A cross-disciplinary toolkit for spatial and environmental
+        research, combining GIS, remote sensing, statistical analysis,
+        geospatial modelling and computational methods.
+
+      </p>
+
+    </div>
+
+
+    <div class="skills">
+
+      <span class="skill">GIS</span>
+      <span class="skill">Remote Sensing</span>
+      <span class="skill">Spatial Analysis</span>
+      <span class="skill">QGIS</span>
+      <span class="skill">ArcGIS</span>
+      <span class="skill">Google Earth Engine</span>
+      <span class="skill">Artificial Intelligence</span>
+      <span class="skill">Machine Learning</span>
+      <span class="skill">Deep Learning</span>
+      <span class="skill">Spatial Modelling</span>
+      <span class="skill">Statistical Analysis</span>
+      <span class="skill">Natural Hazard Assessment</span>
+      <span class="skill">Climate Change Analysis</span>
+      <span class="skill">Satellite Data</span>
+      <span class="skill">UAV Data</span>
+      <span class="skill">PhenoCam</span>
+      <span class="skill">Python</span>
+      <span class="skill">R</span>
+      <span class="skill">JavaScript</span>
+      <span class="skill">HEC-RAS</span>
+      <span class="skill">Environmental Monitoring</span>
+      <span class="skill">Environmental Sensors</span>
+      <span class="skill">Geospatial Data Visualisation</span>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     CONTACT
+     ========================= -->
+
+<section
+  class="content-section contact-section"
+  id="contact"
+>
+
+  <div class="container">
+
+    <div class="contact-panel">
+
+
+      <div>
+
+        <div class="section-kicker">
+          Contact
+        </div>
+
+        <h2>
+          Research, geospatial science & collaboration.
+        </h2>
+
+        <p>
+
+          For research collaborations, geospatial and environmental
+          projects, scientific partnerships or related professional
+          opportunities, please use the contact and research-profile
+          links provided here.
+
+        </p>
+
+      </div>
+
+
+
+      <div class="contact-links">
+
+
+        <a
+          class="contact-link"
+          href="mailto:zkhan@myamu.ac.in"
+        >
+
+          <span>
+            zkhan@myamu.ac.in
+          </span>
+
+          <span>
+            ↗
+          </span>
+
+        </a>
+
+
+
+        <a
+          class="contact-link"
+          href="mailto:zainab.pd@ce.iitr.ac.in"
+        >
+
+          <span>
+            zainab.pd@ce.iitr.ac.in
+          </span>
+
+          <span>
+            ↗
+          </span>
+
+        </a>
+
+
+
+        <a
+          class="contact-link"
+          href="https://orcid.org/0000-0002-6072-521X"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <span>
+            ORCID
+          </span>
+
+          <span>
+            ↗
+          </span>
+
+        </a>
+
+
+
+        <a
+          class="contact-link"
+          href="https://www.researchgate.net/profile/Zainab-Khan-7"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <span>
+            ResearchGate
+          </span>
+
+          <span>
+            ↗
+          </span>
+
+        </a>
+
+
+
+        <a
+          class="contact-link"
+          href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <span>
+            HazWatch · Google Play
+          </span>
+
+          <span>
+            ↗
+          </span>
+
+        </a>
+
+
+
+        <a
+          class="contact-link"
+          href="https://himalayanweather.netlify.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+
+          <span>
+            WeatherScope
+          </span>
+
+          <span>
+            ↗
+          </span>
+
+        </a>
+
+
+
+        <a
+          class="contact-link"
+          href="cv.pdf"
+        >
+
+          <span>
+            Download CV
+          </span>
+
+          <span>
+            ↓
+          </span>
+
+        </a>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+     ========================= -->
+
+<footer>
+
+  <div class="container footer-inner">
+
+    <div>
+      © 2026 Zainab Khan
+    </div>
+
+    <div>
+      Environmental Geography · Geospatial Research · Climate Change · Natural Hazards
+    </div>
+
+  </div>
+
+</footer>
+
+
+
+<script>
+
+  const menuButton =
+    document.getElementById("menuButton");
+
+  const navLinks =
+    document.getElementById("navLinks");
+
+
+  menuButton.addEventListener(
+    "click",
+    function(){
+
+      const isOpen =
+        navLinks.classList.toggle("open");
+
+      menuButton.setAttribute(
+        "aria-expanded",
+        isOpen
+      );
+
+      menuButton.textContent =
+        isOpen ? "×" : "☰";
+    }
+  );
+
+
+  navLinks
+    .querySelectorAll("a")
+    .forEach(function(link){
+
+      link.addEventListener(
+        "click",
+        function(){
+
+          navLinks.classList.remove("open");
+
+          menuButton.setAttribute(
+            "aria-expanded",
+            "false"
+          );
+
+          menuButton.textContent = "☰";
+
+        }
+      );
+
+    });
+
+</script>
+
+
+</body>
+</html>
