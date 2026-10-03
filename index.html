@@ -1406,7 +1406,24 @@
 
     }
 
-  </style>
+  
+    /* Refined introduction and consolidated academic profiles */
+    .hero{padding:72px 0}
+    .hero-grid{grid-template-columns:minmax(0,1.3fr) minmax(280px,.8fr);gap:64px}
+    .hero h1{font-size:clamp(2.7rem,5.6vw,4.5rem);line-height:1.06;letter-spacing:-.025em;margin-bottom:16px}
+    .hero-role{font-size:1.12rem;font-weight:600;color:#b8d8d2;margin-bottom:18px}
+    .hero-intro{max-width:560px;font-size:1.05rem}
+    .profile-panel{padding:0;border:0;background:none}
+    .profile-portrait{display:block;width:100%;height:auto;max-height:390px;object-fit:cover;object-position:center 32%;border-radius:8px;margin-bottom:22px}
+    .profile-panel-title{margin-bottom:10px}
+    .academic-links{display:flex;flex-wrap:wrap;gap:8px}
+    .academic-links a{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:8px 12px;border:1px solid rgba(255,255,255,.25);border-radius:5px;font-size:.8rem;color:#edf4f5}
+    .academic-links a:hover{background:rgba(255,255,255,.09)}
+    .about-grid{gap:40px}
+    @media(max-width:960px){.hero-grid{grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);gap:32px}}
+    @media(max-width:760px){.hero{padding:48px 0}.hero-grid{grid-template-columns:1fr;gap:34px}.profile-panel{max-width:420px}.profile-portrait{max-height:420px}.hero h1{font-size:2.8rem}.hero-role{font-size:1rem}.about-grid{gap:18px}}
+
+</style>
 </head>
 
 
@@ -1425,8 +1442,8 @@
       class="brand"
       href="#top"
     >
-      <span class="brand-mark"></span>
-      Zainab Khan
+      <span class="brand-mark" aria-hidden="true"></span>
+      Portfolio
     </a>
 
 
@@ -1494,153 +1511,28 @@
      ========================= -->
 
 <section class="hero">
-
   <div class="container hero-grid">
-
-
-    <div>
-
-      <div class="eyebrow">
-        Environmental Geography · Geospatial Science · Climate Change · Natural Hazards
-      </div>
-
-
-      <h1>
-        Zainab
-        <span>Khan</span>
-      </h1>
-
-
-      <p class="hero-intro">
-
-        Environmental Geographer and Geospatial Researcher working on
-        climate change, natural hazards and spatial analysis through GIS,
-        remote sensing and computational approaches including artificial
-        intelligence, machine learning and deep learning.
-
-      </p>
-
-
+    <div class="hero-copy">
+      <div class="eyebrow">Research portfolio</div>
+      <h1>Zainab Khan</h1>
+      <p class="hero-role">Environmental Geographer &amp; Geospatial Researcher</p>
+      <p class="hero-intro">Connecting environmental research with practical tools for understanding a changing world.</p>
       <div class="hero-links">
-
-        <a
-          class="button button-primary"
-          href="#research"
-        >
-          Explore Research
-        </a>
-
-
-        <a
-          class="button button-outline-light"
-          href="#papers"
-        >
-          Publications
-        </a>
-
-
-        <a
-          class="button button-outline-light"
-          href="#projects"
-        >
-          Selected Projects
-        </a>
-
-
-        <a
-          class="button button-outline-light"
-          href="#media"
-        >
-          Media Coverage
-        </a>
-
+        <a class="button button-primary" href="#projects">Selected Projects</a>
+        <a class="button button-outline-light" href="#papers">Publications</a>
+        <a class="button button-outline-light" href="#contact">Get in touch</a>
       </div>
-
     </div>
-
-
-
-    <aside class="profile-panel">
-
-      <div class="profile-panel-title">
-        Research Profile
+    <aside class="profile-panel" aria-label="Portrait and research profiles">
+      <img class="profile-portrait" src="assets/zainab-khan-portrait.jpg" alt="Zainab Khan outdoors during fieldwork, holding an instrument" width="720" height="762" fetchpriority="high">
+      <div class="profile-panel-title">Find my work</div>
+      <div class="academic-links">
+        <a href="https://scholar.google.com/citations?user=ECIJQ9cAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Google Scholar <span aria-hidden="true">↗</span></a>
+        <a href="https://www.researchgate.net/profile/Zainab-Khan-7" target="_blank" rel="noopener noreferrer">ResearchGate <span aria-hidden="true">↗</span></a>
+        <a href="https://orcid.org/0000-0002-6072-521X" target="_blank" rel="noopener noreferrer">ORCID <span aria-hidden="true">↗</span></a>
       </div>
-
-
-      <div class="profile-item">
-
-        <strong>
-          PhD · Environmental Geography
-        </strong>
-
-        <span>
-          Himalayan ecosystems, climate change and environmental analysis
-        </span>
-
-      </div>
-
-
-      <div class="profile-item">
-
-        <strong>
-          2 Postdoctoral Research Positions
-        </strong>
-
-        <span>
-          IIT Roorkee · Aligarh Muslim University
-        </span>
-
-      </div>
-
-
-      <div class="profile-item">
-
-        <strong>
-          15+ Research Papers
-        </strong>
-
-        <span>
-          Climate change, hazards, remote sensing and spatial analysis
-        </span>
-
-      </div>
-
-
-      <div class="profile-item">
-
-        <strong>
-          Geospatial Platforms
-        </strong>
-
-        <span>
-          HazWatch · WeatherScope
-        </span>
-
-      </div>
-
-
-      <div class="profile-item">
-
-        <strong>
-          ORCID
-        </strong>
-
-        <span>
-          <a
-            href="https://orcid.org/0000-0002-6072-521X"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            0000-0002-6072-521X ↗
-          </a>
-        </span>
-
-      </div>
-
     </aside>
-
   </div>
-
 </section>
 
 
@@ -1649,96 +1541,17 @@
      ABOUT
      ========================= -->
 
-<section
-  class="content-section"
-  id="about"
->
-
+<section class="content-section" id="about">
   <div class="container">
-
     <div class="section-heading">
-
-      <div>
-
-        <div class="section-kicker">
-          Profile
-        </div>
-
-        <h2>
-          About
-        </h2>
-
-      </div>
-
-
-      <p>
-
-        My work centres on climate change, natural hazards and spatial
-        analysis, with geospatial science providing the common framework
-        across diverse environmental research problems.
-
-      </p>
-
+      <div><div class="section-kicker">Approach</div><h2>About</h2></div>
+      <p>I turn research questions into evidence, explanations and tools that people can use.</p>
     </div>
-
-
     <div class="about-grid">
-
-      <div>
-
-        <p>
-
-          I am an Environmental Geographer and Geospatial Researcher with
-          research interests spanning climate change, natural hazards,
-          environmental systems and spatial analysis. My doctoral research
-          focused on Himalayan lake ecosystems, phytoplankton dynamics and
-          climate-related environmental change.
-
-        </p>
-
-
-        <p>
-
-          A central part of my work is the application of geospatial
-          technologies to understand complex environmental and spatial
-          processes. I use GIS, satellite remote sensing, spatial modelling
-          and statistical approaches together with artificial intelligence,
-          machine learning and deep learning where appropriate.
-
-        </p>
-
-      </div>
-
-
-      <div>
-
-        <p>
-
-          My research has addressed diverse problems including landslide
-          susceptibility, forest-fire risk, land-surface-temperature change,
-          groundwater mapping, carbon sequestration, ecological change and
-          climate-sensitive Himalayan environments.
-
-        </p>
-
-
-        <p>
-
-          My broader interests include climate-risk assessment, multi-hazard
-          analysis, geospatial AI, remote-sensing applications and the
-          development of spatial tools and data-driven systems for
-          environmental research. Environmental monitoring, field
-          observations, sensors and citizen-generated data form part of this
-          broader geospatial research framework where relevant.
-
-        </p>
-
-      </div>
-
+      <p>My path combines doctoral training in Environmental Geography with postdoctoral research at Aligarh Muslim University and IIT Roorkee. Working across academic teams and field settings has shaped an approach grounded in observation, careful analysis and collaboration.</p>
+      <p>Alongside scholarly publications, I develop interactive applications that make complex information easier to explore and communicate. I value clear methods, transparent limitations and practical relevance, bringing the same care to a research study and a public-facing tool.</p>
     </div>
-
   </div>
-
 </section>
 
 
@@ -2608,34 +2421,7 @@
 
 
 
-      <a
-        class="publication-item"
-        href="https://www.researchgate.net/profile/Zainab-Khan-7"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-
-        <div>
-
-          <div class="publication-title">
-
-            View complete publication profile
-
-          </div>
-
-          <div class="publication-meta">
-
-            ResearchGate · Zainab Khan
-
-          </div>
-
-        </div>
-
-        <span class="publication-arrow">
-          ↗
-        </span>
-
-      </a>
+      
 
 
     </div>
@@ -2856,8 +2642,7 @@
 
           For research collaborations, geospatial and environmental
           projects, scientific partnerships or related professional
-          opportunities, please use the contact and research-profile
-          links provided here.
+          opportunities, please get in touch by email.
 
         </p>
 
@@ -2902,79 +2687,19 @@
 
 
 
-        <a
-          class="contact-link"
-          href="https://orcid.org/0000-0002-6072-521X"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-
-          <span>
-            ORCID
-          </span>
-
-          <span>
-            ↗
-          </span>
-
-        </a>
+        
 
 
 
-        <a
-          class="contact-link"
-          href="https://www.researchgate.net/profile/Zainab-Khan-7"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-
-          <span>
-            ResearchGate
-          </span>
-
-          <span>
-            ↗
-          </span>
-
-        </a>
+        
 
 
 
-        <a
-          class="contact-link"
-          href="https://play.google.com/store/apps/details?id=in.hazwatch.myapp"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-
-          <span>
-            HazWatch · Google Play
-          </span>
-
-          <span>
-            ↗
-          </span>
-
-        </a>
+        
 
 
 
-        <a
-          class="contact-link"
-          href="https://himalayanweather.netlify.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-
-          <span>
-            WeatherScope
-          </span>
-
-          <span>
-            ↗
-          </span>
-
-        </a>
+        
 
 
 
@@ -3016,7 +2741,7 @@
   <div class="container footer-inner">
 
     <div>
-      © 2026 Zainab Khan
+      © 2026 · Research portfolio
     </div>
 
     <div>
