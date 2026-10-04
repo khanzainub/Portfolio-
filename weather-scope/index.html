@@ -1,0 +1,2785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+  <meta name="theme-color" content="#07070b" />
+  <title>WeatherScope — Global Weather & Atmospheric Explorer</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    :root{
+      --bg:#050507;
+      --panel:#0d0d13;
+      --panel2:#13131c;
+      --text:#f6f4fb;
+      --muted:#aaa6b6;
+      --line:#2a2934;
+      --pink:#ff3cac;
+      --pink2:#ff7ac8;
+      --purple:#7d4dff;
+      --violet:#b55cff;
+      --cyan:#42d8ff;
+      --green:#60f2a8;
+      --amber:#ffcc66;
+      --danger:#ff6b7f;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--bg)}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(255,60,172,.16), transparent 30%),
+        radial-gradient(circle at 95% 8%, rgba(125,77,255,.17), transparent 26%),
+        var(--bg);
+      min-height:100%;
+    }
+
+    button{font:inherit;touch-action:manipulation}
+
+    .shell{
+      width:min(1500px,96%);
+      margin:0 auto;
+      padding:22px 0 30px;
+    }
+
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:20px;
+      margin-bottom:18px;
+    }
+
+    .eyebrow,.label{
+      color:var(--pink2);
+      font-size:.72rem;
+      font-weight:800;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    h1{
+      margin:.28rem 0 .35rem;
+      font-size:clamp(2rem,4.2vw,4.7rem);
+      line-height:.96;
+      background:linear-gradient(90deg,#fff 0%,#ff83ca 42%,#a58bff 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .sub{
+      margin:0;
+      max-width:900px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      border:1px solid var(--line);
+      color:#fff;
+      background:rgba(255,255,255,.035);
+      padding:10px 13px;
+      border-radius:12px;
+      cursor:pointer;
+      min-height:44px;
+    }
+
+    .btn:hover{
+      border-color:#6758c9;
+      background:rgba(125,77,255,.10);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.55fr) minmax(370px,.8fr);
+      gap:18px;
+      align-items:start;
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(16,16,23,.96),rgba(8,8,12,.985));
+      border-radius:22px;
+      overflow:hidden;
+    }
+
+    .map-card{padding:14px}
+    .side{display:grid;gap:18px}
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:2px 2px 12px;
+    }
+
+    .section-head h2,.section-head h3{
+      margin:.2rem 0 0;
+      font-size:1.05rem;
+    }
+
+    .pill{
+      font-size:.74rem;
+      font-weight:800;
+      color:#a6ffc8;
+      background:rgba(96,242,168,.07);
+      border:1px solid rgba(96,242,168,.28);
+      border-radius:999px;
+      padding:7px 10px;
+      white-space:nowrap;
+    }
+
+    #map{
+      width:100%;
+      height:690px;
+      border-radius:16px;
+      overflow:hidden;
+      background:#0b0b0f;
+      outline:1px solid rgba(255,255,255,.05);
+      touch-action:none;
+    }
+
+    .map-tip{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:10px;
+      color:#8f8a9b;
+      font-size:.77rem;
+      padding:10px 3px 1px;
+    }
+
+    .info-card,.chart-card,.details-card,.wide-card{padding:16px}
+
+    .place-name{
+      margin:.25rem 0 .1rem;
+      font-size:1.55rem;
+      line-height:1.2;
+    }
+
+    .coords{
+      margin:.2rem 0 1rem;
+      color:var(--muted);
+      font-size:.84rem;
+      line-height:1.5;
+    }
+
+    .metrics{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .metric-box{
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.025);
+      border-radius:15px;
+      padding:13px;
+    }
+
+    .metric-box small{color:var(--muted)}
+    .metric-value{
+      margin-top:5px;
+      font-size:1.65rem;
+      font-weight:850;
+      line-height:1;
+      word-break:break-word;
+    }
+
+    .bar-block{margin-top:14px}
+    .bar-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-size:.84rem;
+      margin-bottom:6px;
+    }
+
+    .bar-row span{color:#d8d5df}
+    .track{
+      height:14px;
+      border-radius:99px;
+      background:#24232c;
+      overflow:hidden;
+    }
+
+    .fill{
+      width:0;
+      height:100%;
+      border-radius:99px;
+      transition:width .55s ease;
+    }
+
+    .temp-fill{background:linear-gradient(90deg,var(--pink),var(--pink2),var(--purple))}
+    .rain-fill{background:linear-gradient(90deg,var(--purple),var(--violet),var(--pink2))}
+
+    .note{
+      margin-top:13px;
+      color:#9995a5;
+      font-size:.77rem;
+      line-height:1.55;
+      border-top:1px solid rgba(255,255,255,.06);
+      padding-top:11px;
+    }
+
+    .detail-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .detail-item{
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.025);
+      border-radius:14px;
+      padding:12px;
+      min-width:0;
+    }
+
+    .detail-item span{
+      display:block;
+      color:#8f8b99;
+      font-size:.73rem;
+      margin-bottom:5px;
+    }
+
+    .detail-item strong{
+      display:block;
+      font-size:.94rem;
+      line-height:1.35;
+      overflow-wrap:anywhere;
+    }
+
+    .chart-card{min-height:390px}
+    .chart-wrap{height:315px;position:relative}
+    .chart-note{
+      color:#8d8998;
+      font-size:.74rem;
+      line-height:1.5;
+      margin-top:8px;
+    }
+
+    .wide-card{
+      grid-column:1/-1;
+    }
+
+    .wide-chart{
+      height:365px;
+      position:relative;
+    }
+
+    .air-summary{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .air-chip{
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.025);
+      border-radius:14px;
+      padding:11px;
+    }
+
+    .air-chip span{
+      display:block;
+      color:#8f8b99;
+      font-size:.72rem;
+      margin-bottom:4px;
+    }
+
+    .air-chip strong{font-size:1.05rem}
+
+    .loading{
+      opacity:.75;
+      animation:pulse 1s ease-in-out infinite alternate;
+    }
+    @keyframes pulse{from{opacity:.5}to{opacity:1}}
+
+    footer{
+      color:#74707e;
+      font-size:.75rem;
+      margin-top:14px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      padding:0 4px;
+    }
+
+    .leaflet-container{font-family:inherit}
+    .leaflet-control-zoom a{
+      background:#111118!important;
+      color:#fff!important;
+      border-bottom-color:#2a2934!important;
+    }
+    .leaflet-control-attribution{
+      background:rgba(5,5,7,.82)!important;
+      color:#7e7989!important;
+    }
+    .leaflet-control-attribution a{color:#d979ff!important}
+
+    @media(max-width:1050px){
+      .grid{grid-template-columns:1fr}
+      #map{height:610px}
+      .side{grid-template-columns:1fr 1fr}
+      .info-card,.details-card{grid-column:auto}
+      .wide-card{grid-column:1/-1}
+    }
+
+    @media(max-width:760px){
+      .shell{width:94%;padding-top:14px}
+      .header{flex-direction:column}
+      .actions{width:100%;justify-content:flex-start}
+      .actions .btn{flex:1}
+      #map{height:520px}
+      .side{grid-template-columns:1fr}
+      .metrics,.detail-grid{grid-template-columns:1fr 1fr}
+      .air-summary{grid-template-columns:1fr 1fr}
+      .wide-chart{height:330px}
+    }
+
+    @media(max-width:430px){
+      #map{height:470px}
+      .metrics,.detail-grid,.air-summary{grid-template-columns:1fr}
+      .chart-wrap{height:290px}
+    }
+
+
+    .analytics-grid{
+      grid-column:1/-1;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .analytics-grid .chart-card{
+      min-height:470px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .analytics-grid .chart-wrap{
+      height:330px;
+      flex:1;
+      min-height:300px;
+    }
+
+    .osm-map-tiles{
+      filter:brightness(.55) contrast(1.2) saturate(.75);
+      transition:filter .2s ease;
+    }
+
+    body.light-theme{
+      --bg:#f6f4f9;
+      --panel:#ffffff;
+      --panel2:#f7f5fa;
+      --text:#17141c;
+      --muted:#6f6978;
+      --line:#d9d4df;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(255,60,172,.08), transparent 28%),
+        radial-gradient(circle at 95% 8%, rgba(125,77,255,.08), transparent 24%),
+        var(--bg);
+    }
+
+    body.light-theme h1{
+      background:linear-gradient(90deg,#251b2b 0%,#d72d91 45%,#6d50dd 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    body.light-theme .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,246,251,.98));
+      box-shadow:0 10px 30px rgba(55,42,67,.06);
+    }
+
+    body.light-theme .btn{
+      color:#25202b;
+      background:rgba(255,255,255,.72);
+    }
+
+    body.light-theme .metric-box,
+    body.light-theme .detail-item,
+    body.light-theme .air-chip{
+      background:rgba(78,58,91,.035);
+      border-color:rgba(78,58,91,.11);
+    }
+
+    body.light-theme .track{background:#e9e4ec}
+    body.light-theme .bar-row span{color:#4f4857}
+    body.light-theme .note,
+    body.light-theme .chart-note{color:#766f7d}
+    body.light-theme .osm-map-tiles{filter:none}
+    body.light-theme .leaflet-control-zoom a{
+      background:#fff!important;
+      color:#1b1720!important;
+      border-bottom-color:#ded8e3!important;
+    }
+    body.light-theme .leaflet-control-attribution{
+      background:rgba(255,255,255,.9)!important;
+      color:#555!important;
+    }
+
+    @media(max-width:900px){
+      .analytics-grid{grid-template-columns:1fr}
+    }
+
+  
+    /* Professional typography and theme-safe text */
+    .section-head h2,
+    .section-head h3,
+    .place-name,
+    .metric-value,
+    .detail-item strong,
+    .air-chip strong{
+      color:var(--text);
+    }
+
+    .metric-box small,
+    .detail-item span,
+    .air-chip span,
+    .coords,
+    .map-tip,
+    .note,
+    .chart-note{
+      color:var(--muted);
+    }
+
+    .bar-row strong{
+      color:var(--text);
+      font-weight:750;
+    }
+
+    .bar-row span{
+      color:var(--muted);
+      font-weight:650;
+    }
+
+    .section-actions{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .chart-download{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.035);
+      color:var(--text);
+      padding:8px 11px;
+      border-radius:10px;
+      font-size:.75rem;
+      font-weight:750;
+      cursor:pointer;
+      min-height:36px;
+      transition:.18s ease;
+      white-space:nowrap;
+    }
+
+    .chart-download:hover{
+      transform:translateY(-1px);
+      border-color:var(--purple);
+      background:rgba(125,77,255,.10);
+    }
+
+    body.light-theme .chart-download{
+      background:#fff;
+      color:#2b2530;
+      border-color:#d9d4df;
+      box-shadow:0 2px 8px rgba(60,45,70,.05);
+    }
+
+    body.light-theme .chart-download:hover{
+      background:#f5f1fb;
+      border-color:#8a6be0;
+    }
+
+    body.light-theme .pill{
+      color:#24633f;
+      background:rgba(39,148,87,.07);
+      border-color:rgba(39,148,87,.22);
+    }
+
+    body.light-theme .eyebrow,
+    body.light-theme .label{
+      color:#a12f7a;
+    }
+
+    body.light-theme .coords,
+    body.light-theme .map-tip,
+    body.light-theme .note,
+    body.light-theme .chart-note,
+    body.light-theme .metric-box small,
+    body.light-theme .detail-item span,
+    body.light-theme .air-chip span,
+    body.light-theme .bar-row span{
+      color:#645d6b;
+    }
+
+    body.light-theme .metric-value,
+    body.light-theme .detail-item strong,
+    body.light-theme .air-chip strong,
+    body.light-theme .bar-row strong,
+    body.light-theme .section-head h2,
+    body.light-theme .section-head h3,
+    body.light-theme .place-name{
+      color:#211c26;
+    }
+
+    @media(max-width:600px){
+      .section-head{
+        align-items:flex-start;
+      }
+      .section-actions{
+        justify-content:flex-start;
+      }
+      .chart-download{
+        width:100%;
+      }
+    }
+
+  
+    .visual-detail{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-height:86px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .detail-copy{
+      min-width:0;
+      flex:1;
+    }
+
+    .detail-icon{
+      width:54px;
+      height:54px;
+      flex:0 0 54px;
+      display:grid;
+      place-items:center;
+      border-radius:14px;
+      background:
+        linear-gradient(145deg,rgba(255,60,172,.12),rgba(125,77,255,.10));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    }
+
+    .detail-icon svg{
+      width:36px;
+      height:36px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:2.2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      color:#d9b9ff;
+    }
+
+    .people-icon svg circle{
+      fill:rgba(255,122,200,.28);
+      stroke:#ff8fce;
+    }
+
+    .contour-icon svg{color:#8fe6c6}
+    .admin-icon svg{color:#b9a7ff}
+    .region-icon svg{color:#ff9bd5}
+    .globe-icon svg{color:#93dfff}
+    .boundary-icon svg{color:#f0c676}
+
+    body.light-theme .detail-icon{
+      background:linear-gradient(145deg,rgba(255,60,172,.07),rgba(125,77,255,.07));
+      border-color:rgba(72,57,83,.10);
+      box-shadow:none;
+    }
+
+    body.light-theme .contour-icon svg{color:#2f8c70}
+    body.light-theme .people-icon svg{color:#b23b80}
+    body.light-theme .admin-icon svg{color:#6e54c7}
+    body.light-theme .region-icon svg{color:#ad3e7d}
+    body.light-theme .globe-icon svg{color:#297a9a}
+    body.light-theme .boundary-icon svg{color:#9a742d}
+
+    @media(max-width:520px){
+      .visual-detail{
+        min-height:80px;
+      }
+      .detail-icon{
+        width:48px;
+        height:48px;
+        flex-basis:48px;
+      }
+      .detail-icon svg{
+        width:32px;
+        height:32px;
+      }
+    }
+
+  
+    .chart-wrap canvas,
+    .wide-chart canvas{
+      cursor:crosshair;
+    }
+
+  
+    .weather-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .radial-weather-wrap{min-height:390px!important;height:390px!important;position:relative;}
+    #monthlyWeatherCanvas{width:100%!important;height:100%!important;cursor:crosshair;}
+    .weather-tooltip{position:absolute;z-index:20;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s ease,transform .12s ease;background:rgba(14,14,20,.96);color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px 10px;font-size:.75rem;box-shadow:0 8px 26px rgba(0,0,0,.25);white-space:nowrap;}
+    .weather-tooltip.show{opacity:1;transform:translateY(0)}
+    .weather-tooltip strong,.weather-tooltip span{display:block}.weather-tooltip span{margin-top:3px;color:#d7d3de}
+    body.light-theme .weather-tooltip{background:rgba(255,255,255,.98);color:#211c26;border-color:#ddd6e2;box-shadow:0 8px 26px rgba(70,55,80,.14)}
+    body.light-theme .weather-tooltip span{color:#645d6b}
+    .wind-card{min-height:460px}.wind-dial-wrap{height:300px;display:grid;place-items:center;margin-top:4px}#windDial{width:min(100%,300px);height:300px;display:block}
+    .wind-readout{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}.wind-readout>div{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);border-radius:13px;padding:10px 12px}.wind-readout span{display:block;color:var(--muted);font-size:.72rem;margin-bottom:4px}.wind-readout strong{color:var(--text);font-size:.96rem}body.light-theme .wind-readout>div{background:rgba(78,58,91,.035);border-color:rgba(78,58,91,.11)}
+    @media(max-width:520px){.weather-metrics{grid-template-columns:1fr 1fr}.radial-weather-wrap{height:350px!important;min-height:350px!important}.wind-dial-wrap{height:270px}#windDial{height:270px}}
+
+
+    /* WeatherScope final polish: layout + proportional typography only */
+    :root{
+      --fs-micro:clamp(.72rem,.68rem + .12vw,.82rem);
+      --fs-small:clamp(.78rem,.73rem + .16vw,.90rem);
+      --fs-body:clamp(.90rem,.84rem + .18vw,1rem);
+      --fs-card-title:clamp(1.02rem,.94rem + .25vw,1.18rem);
+    }
+
+    body{
+      font-size:var(--fs-body);
+    }
+
+    .sub{
+      font-size:clamp(.92rem,.86rem + .18vw,1.04rem);
+      max-width:980px;
+    }
+
+    .eyebrow,.label{
+      font-size:var(--fs-micro);
+    }
+
+    .section-head h2,.section-head h3{
+      font-size:var(--fs-card-title);
+      line-height:1.25;
+    }
+
+    .pill,.map-tip,.chart-note,.detail-item span,.air-chip span,.coords{
+      font-size:var(--fs-small);
+    }
+
+    .btn,.chart-download{
+      font-size:clamp(.78rem,.73rem + .12vw,.88rem);
+    }
+
+    .metric-box small,.bar-row span,.wind-readout span{
+      font-size:var(--fs-small)!important;
+    }
+
+    .metric-value{
+      font-size:clamp(1.10rem,1rem + .35vw,1.38rem);
+    }
+
+    .detail-item strong,.wind-readout strong{
+      font-size:clamp(.90rem,.84rem + .16vw,1rem)!important;
+    }
+
+    /* Bottom plot area: use the available card space fully without changing charts */
+    .analytics-grid{
+      align-items:stretch!important;
+    }
+
+    .analytics-grid > .chart-card{
+      display:grid!important;
+      grid-template-rows:auto minmax(0,1fr) auto;
+      min-height:0!important;
+      height:clamp(500px,54vw,650px);
+    }
+
+    .analytics-grid > .chart-card .chart-wrap{
+      height:auto!important;
+      min-height:0!important;
+      align-self:stretch;
+      overflow:hidden;
+    }
+
+    .analytics-grid > .chart-card .radial-weather-wrap{
+      height:auto!important;
+      min-height:0!important;
+    }
+
+    .analytics-grid > .chart-card .chart-note{
+      margin-top:10px;
+      padding-bottom:0;
+    }
+
+    .wide-card{
+      display:grid;
+      grid-template-rows:auto minmax(0,1fr);
+      height:clamp(470px,45vw,610px);
+    }
+
+    .wide-card .wide-chart{
+      height:auto!important;
+      min-height:0!important;
+      align-self:stretch;
+      overflow:hidden;
+    }
+
+    .chart-wrap canvas,
+    .wide-chart canvas{
+      display:block;
+      width:100%!important;
+      height:100%!important;
+    }
+
+    /* Avoid visually empty card bottoms caused by excessive fixed sizing */
+    .chart-card,.wide-card{
+      padding-bottom:14px;
+    }
+
+    @media(max-width:900px){
+      .analytics-grid > .chart-card{
+        height:clamp(470px,72vw,610px);
+      }
+      .wide-card{
+        height:clamp(450px,68vw,570px);
+      }
+    }
+
+    @media(max-width:600px){
+      .analytics-grid > .chart-card{
+        height:460px;
+      }
+      .wide-card{
+        height:440px;
+      }
+      .section-head{
+        align-items:flex-start;
+      }
+    }
+
+  
+    /* Final forecast-card fill: no dead space, chart content fills the card */
+    .wide-card{
+      min-height:0!important;
+      height:auto!important;
+      display:flex!important;
+      flex-direction:column!important;
+    }
+
+    .wide-card .section-head{
+      flex:0 0 auto;
+    }
+
+    .wide-card .wide-chart{
+      flex:1 1 auto!important;
+      width:100%!important;
+      height:clamp(390px,36vw,520px)!important;
+      min-height:390px!important;
+      margin:0!important;
+      padding:0!important;
+      overflow:hidden;
+    }
+
+    .wide-card .wide-chart > canvas{
+      display:block!important;
+      width:100%!important;
+      height:100%!important;
+      margin:0!important;
+    }
+
+    @media(max-width:760px){
+      .wide-card .wide-chart{
+        height:390px!important;
+        min-height:390px!important;
+      }
+    }
+
+    @media(max-width:430px){
+      .wide-card .wide-chart{
+        height:360px!important;
+        min-height:360px!important;
+      }
+    }
+
+  
+    /* Premium live forecast snapshot fills the otherwise unused plot corner */
+    .forecast-chart-shell{
+      position:relative;
+    }
+
+    .forecast-snapshot{
+      position:absolute;
+      top:14px;
+      right:52px;
+      z-index:6;
+      width:min(290px,34%);
+      padding:12px 13px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:linear-gradient(180deg,rgba(18,18,26,.93),rgba(10,10,15,.90));
+      backdrop-filter:blur(10px);
+      box-shadow:0 12px 30px rgba(0,0,0,.18);
+      pointer-events:none;
+    }
+
+    .forecast-snapshot-title{
+      color:var(--pink2);
+      font-size:clamp(.68rem,.64rem + .10vw,.76rem);
+      font-weight:850;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:9px;
+    }
+
+    .forecast-snapshot-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+
+    .forecast-snapshot-item{
+      min-width:0;
+      padding:8px 9px;
+      border-radius:11px;
+      background:rgba(255,255,255,.035);
+      border:1px solid rgba(255,255,255,.055);
+    }
+
+    .forecast-snapshot-item span{
+      display:block;
+      color:var(--muted);
+      font-size:clamp(.66rem,.62rem + .10vw,.74rem);
+      margin-bottom:3px;
+      white-space:nowrap;
+    }
+
+    .forecast-snapshot-item strong{
+      display:block;
+      font-size:clamp(.82rem,.76rem + .16vw,.95rem);
+      line-height:1.2;
+      color:var(--text);
+      overflow-wrap:anywhere;
+    }
+
+    body.light-theme .forecast-snapshot{
+      background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(248,246,251,.92));
+      border-color:rgba(45,35,55,.12);
+      box-shadow:0 12px 30px rgba(55,40,70,.10);
+    }
+
+    body.light-theme .forecast-snapshot-item{
+      background:rgba(50,40,65,.035);
+      border-color:rgba(50,40,65,.07);
+    }
+
+    @media(max-width:900px){
+      .forecast-snapshot{
+        width:min(270px,42%);
+        right:46px;
+      }
+    }
+
+    @media(max-width:700px){
+      .forecast-snapshot{
+        position:static;
+        width:auto;
+        margin:8px 0 10px;
+        pointer-events:auto;
+      }
+      .forecast-chart-shell{
+        display:flex!important;
+        flex-direction:column!important;
+      }
+      .forecast-chart-shell canvas{
+        flex:1 1 auto;
+        min-height:320px;
+      }
+    }
+
+  
+    /* Extended location / astronomy panel */
+    .location-details-extended{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .detail-group{
+      border-top:1px solid rgba(255,255,255,.065);
+      padding-top:12px;
+    }
+
+    .detail-group:first-of-type{
+      border-top:0;
+      padding-top:2px;
+    }
+
+    .detail-group-title{
+      margin-bottom:9px;
+      color:var(--muted);
+      font-size:clamp(.70rem,.66rem + .10vw,.78rem);
+      font-weight:800;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+    }
+
+    .detail-span-2{grid-column:1/-1;}
+
+    .celestial-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:9px;
+    }
+
+    .celestial-item{
+      min-width:0;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      padding:11px;
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.025);
+      border-radius:14px;
+    }
+
+    .celestial-item > div{min-width:0;}
+    .celestial-item span:not(.celestial-symbol),
+    .moon-phase-copy span,
+    .moon-times span,
+    .daylight-main span{
+      display:block;
+      color:var(--muted);
+      font-size:var(--fs-small);
+      margin-bottom:3px;
+    }
+
+    .celestial-item strong,
+    .moon-phase-copy strong,
+    .moon-times strong,
+    .daylight-main strong{
+      display:block;
+      font-size:clamp(.88rem,.82rem + .16vw,1rem);
+      line-height:1.22;
+      color:var(--text);
+    }
+
+    .celestial-item small,
+    .moon-phase-copy small{
+      display:block;
+      margin-top:2px;
+      color:var(--muted);
+      font-size:clamp(.62rem,.59rem + .08vw,.70rem);
+    }
+
+    .celestial-symbol{
+      flex:0 0 31px;
+      height:31px;
+      display:grid!important;
+      place-items:center;
+      margin:0!important;
+      border-radius:10px;
+      font-size:1rem!important;
+      font-weight:900;
+      color:var(--amber)!important;
+      background:rgba(255,204,102,.10);
+      border:1px solid rgba(255,204,102,.18);
+    }
+
+    .sunset-symbol{color:var(--pink2)!important;background:rgba(255,122,200,.09);border-color:rgba(255,122,200,.16);}
+    .uv-symbol{color:#fff!important;background:linear-gradient(135deg,rgba(255,60,172,.55),rgba(125,77,255,.55));font-size:.68rem!important;letter-spacing:.04em;}
+
+    .moon-layout{
+      display:grid;
+      grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+      gap:9px;
+    }
+
+    .moon-phase-card,
+    .moon-times{
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.025);
+      border-radius:14px;
+      padding:11px;
+    }
+
+    .moon-phase-card{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      min-width:0;
+    }
+
+    .moon-disc{
+      flex:0 0 42px;
+      height:42px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      font-size:2.05rem;
+      line-height:1;
+      color:#f7efff;
+      text-shadow:0 0 14px rgba(181,92,255,.34);
+      background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.14),rgba(125,77,255,.10) 50%,rgba(0,0,0,.22));
+      border:1px solid rgba(181,92,255,.20);
+    }
+
+    .moon-phase-copy{min-width:0;}
+
+    .moon-times{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      align-items:center;
+    }
+
+    .moon-times > div{
+      min-width:0;
+      padding:3px 0;
+    }
+
+    .daylight-card{
+      padding:11px 12px 12px;
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.025);
+      border-radius:14px;
+    }
+
+    .daylight-main{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap:12px;
+      margin-bottom:9px;
+    }
+
+    .daylight-track{
+      height:8px;
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(255,255,255,.065);
+    }
+
+    .daylight-fill{
+      width:0;
+      height:100%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,var(--purple),var(--pink2),var(--amber));
+      transition:width .55s ease;
+    }
+
+    .visibility-icon svg{stroke:var(--cyan);}
+
+    body.light-theme .detail-group{border-top-color:rgba(45,35,55,.08);}
+    body.light-theme .celestial-item,
+    body.light-theme .moon-phase-card,
+    body.light-theme .moon-times,
+    body.light-theme .daylight-card{
+      background:rgba(60,45,75,.025);
+      border-color:rgba(45,35,55,.08);
+    }
+
+    @media(max-width:1050px){
+      .celestial-grid{grid-template-columns:repeat(3,1fr);}
+    }
+
+    @media(max-width:760px){
+      .celestial-grid{grid-template-columns:1fr 1fr;}
+      .celestial-item:last-child{grid-column:1/-1;}
+      .moon-layout{grid-template-columns:1fr;}
+    }
+
+    @media(max-width:430px){
+      .celestial-grid{grid-template-columns:1fr;}
+      .celestial-item:last-child{grid-column:auto;}
+      .moon-times{grid-template-columns:1fr 1fr;}
+    }
+
+  
+    /* =========================================================
+       FINAL RESPONSIVE BALANCE PASS
+       Keeps every chart/card filled, aligned and overlap-free.
+       ========================================================= */
+
+    /* Prevent flex/grid children and canvases from forcing overflow */
+    .card,
+    .chart-card,
+    .wide-card,
+    .chart-wrap,
+    .wide-chart,
+    .forecast-chart-shell,
+    .analytics-grid > *{
+      min-width:0!important;
+      min-height:0!important;
+    }
+
+    /* Two analytical cards: same outer height, content fills every row */
+    .analytics-grid{
+      display:grid!important;
+      grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+      gap:18px!important;
+      align-items:stretch!important;
+    }
+
+    .analytics-grid > .chart-card{
+      height:clamp(500px,40vw,610px)!important;
+      min-height:500px!important;
+      display:flex!important;
+      flex-direction:column!important;
+      overflow:hidden!important;
+      padding:16px!important;
+    }
+
+    .analytics-grid > .chart-card > .section-head{
+      flex:0 0 auto!important;
+    }
+
+    .analytics-grid > .chart-card > .air-summary{
+      flex:0 0 auto!important;
+    }
+
+    .analytics-grid > .chart-card > .chart-wrap{
+      position:relative!important;
+      flex:1 1 0!important;
+      width:100%!important;
+      height:auto!important;
+      min-height:0!important;
+      margin:10px 0 0!important;
+      overflow:hidden!important;
+    }
+
+    .analytics-grid > .chart-card > .radial-weather-wrap{
+      margin-top:6px!important;
+    }
+
+    .analytics-grid > .chart-card > .chart-note{
+      flex:0 0 auto!important;
+      margin:10px 0 0!important;
+      padding:0!important;
+    }
+
+    /* Every chart canvas is constrained to its own plot box */
+    .chart-wrap > canvas,
+    .radial-weather-wrap > canvas,
+    .wide-chart canvas{
+      display:block!important;
+      width:100%!important;
+      max-width:100%!important;
+      height:100%!important;
+      max-height:100%!important;
+      margin:0!important;
+    }
+
+    /* Forecast: chart + information panel share the width instead of overlapping */
+    .wide-card{
+      width:100%!important;
+      height:auto!important;
+      min-height:0!important;
+      display:flex!important;
+      flex-direction:column!important;
+      padding:16px!important;
+      overflow:hidden!important;
+    }
+
+    .wide-card > .section-head{
+      flex:0 0 auto!important;
+      margin-bottom:12px!important;
+    }
+
+    .wide-card .wide-chart.forecast-chart-shell{
+      flex:0 0 auto!important;
+      display:grid!important;
+      grid-template-columns:minmax(0,1fr) minmax(245px,300px)!important;
+      gap:14px!important;
+      align-items:stretch!important;
+      width:100%!important;
+      height:clamp(390px,31vw,500px)!important;
+      min-height:390px!important;
+      overflow:hidden!important;
+      position:relative!important;
+    }
+
+    .forecast-chart-shell > canvas{
+      grid-column:1!important;
+      grid-row:1!important;
+      min-width:0!important;
+      min-height:0!important;
+    }
+
+    .forecast-snapshot{
+      position:static!important;
+      grid-column:2!important;
+      grid-row:1!important;
+      align-self:stretch!important;
+      width:auto!important;
+      height:auto!important;
+      margin:0!important;
+      padding:14px!important;
+      display:flex!important;
+      flex-direction:column!important;
+      justify-content:center!important;
+      overflow:hidden!important;
+      pointer-events:auto!important;
+    }
+
+    .forecast-snapshot-grid{
+      grid-template-columns:1fr!important;
+      gap:9px!important;
+    }
+
+    .forecast-snapshot-item{
+      padding:10px 11px!important;
+    }
+
+    /* Keep headings/actions from colliding at intermediate widths */
+    .section-head{
+      min-width:0!important;
+      gap:12px!important;
+    }
+
+    .section-head > div:first-child{
+      min-width:0!important;
+    }
+
+    .section-actions{
+      flex:0 0 auto!important;
+      max-width:100%!important;
+    }
+
+    /* Air summary stays dense and balanced */
+    .air-summary{
+      grid-template-columns:repeat(4,minmax(0,1fr))!important;
+      gap:9px!important;
+      margin:12px 0 4px!important;
+    }
+
+    .air-chip{
+      min-width:0!important;
+      padding:10px!important;
+    }
+
+    .air-chip strong{
+      display:block!important;
+      overflow-wrap:anywhere!important;
+    }
+
+    /* Wind dial: no unused horizontal pocket inside its card */
+    .wind-card{
+      min-height:0!important;
+      height:auto!important;
+      display:flex!important;
+      flex-direction:column!important;
+    }
+
+    .wind-card .wind-dial-wrap{
+      flex:1 1 auto!important;
+      width:100%!important;
+      height:clamp(260px,28vw,330px)!important;
+      min-height:260px!important;
+      margin:6px 0 0!important;
+      overflow:hidden!important;
+    }
+
+    #windDial{
+      width:min(100%,330px)!important;
+      height:min(100%,330px)!important;
+      aspect-ratio:1/1!important;
+      margin:auto!important;
+    }
+
+    /* Tablet: one analytical card per row; preserve generous filled plot areas */
+    @media(max-width:900px){
+      .analytics-grid{
+        grid-template-columns:1fr!important;
+      }
+
+      .analytics-grid > .chart-card{
+        height:clamp(480px,67vw,590px)!important;
+        min-height:480px!important;
+      }
+
+      .wide-card .wide-chart.forecast-chart-shell{
+        grid-template-columns:minmax(0,1fr) minmax(220px,270px)!important;
+        height:430px!important;
+        min-height:430px!important;
+      }
+    }
+
+    /* App / phone: absolutely no overlay; all blocks become full-width stacks */
+    @media(max-width:700px){
+      .analytics-grid{
+        gap:14px!important;
+      }
+
+      .analytics-grid > .chart-card{
+        height:auto!important;
+        min-height:470px!important;
+      }
+
+      .analytics-grid > .chart-card > .chart-wrap{
+        flex:0 0 auto!important;
+        height:350px!important;
+        min-height:350px!important;
+      }
+
+      .analytics-grid > .chart-card > .radial-weather-wrap{
+        height:390px!important;
+        min-height:390px!important;
+      }
+
+      .air-summary{
+        grid-template-columns:1fr 1fr!important;
+      }
+
+      .wide-card .wide-chart.forecast-chart-shell{
+        display:flex!important;
+        flex-direction:column!important;
+        height:auto!important;
+        min-height:0!important;
+        overflow:visible!important;
+      }
+
+      .forecast-chart-shell > canvas{
+        flex:0 0 auto!important;
+        width:100%!important;
+        height:360px!important;
+        min-height:360px!important;
+      }
+
+      .forecast-snapshot{
+        width:100%!important;
+        min-height:0!important;
+        padding:13px!important;
+      }
+
+      .forecast-snapshot-grid{
+        grid-template-columns:1fr 1fr!important;
+      }
+
+      .section-head{
+        align-items:flex-start!important;
+        flex-wrap:wrap!important;
+      }
+
+      .section-actions{
+        width:100%!important;
+        justify-content:flex-start!important;
+      }
+    }
+
+    @media(max-width:430px){
+      .analytics-grid > .chart-card{
+        min-height:0!important;
+      }
+
+      .analytics-grid > .chart-card > .chart-wrap{
+        height:315px!important;
+        min-height:315px!important;
+      }
+
+      .analytics-grid > .chart-card > .radial-weather-wrap{
+        height:350px!important;
+        min-height:350px!important;
+      }
+
+      .air-summary,
+      .forecast-snapshot-grid{
+        grid-template-columns:1fr 1fr!important;
+      }
+
+      .forecast-chart-shell > canvas{
+        height:330px!important;
+        min-height:330px!important;
+      }
+
+      .chart-card,
+      .wide-card{
+        padding:14px!important;
+      }
+    }
+
+    @media(max-width:350px){
+      .air-summary,
+      .forecast-snapshot-grid{
+        grid-template-columns:1fr!important;
+      }
+    }
+
+  
+    /* =========================================================
+       CARD BALANCE FIX — removes the large blank pockets visible
+       in the two-column tablet/app layout.
+       ========================================================= */
+
+    /* Cards should size to their content unless a chart explicitly owns the height. */
+    .side > .info-card,
+    .side > .location-details-extended,
+    .side > .wind-card{
+      align-self:start!important;
+      height:auto!important;
+      min-height:0!important;
+    }
+
+    /* Tablet / compact web: left column stacks Current + Wind;
+       right column is the taller Location Details card. */
+    @media(min-width:761px) and (max-width:1050px){
+      .side{
+        display:grid!important;
+        grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+        grid-template-areas:
+          "current details"
+          "wind    details"!important;
+        grid-template-rows:auto auto!important;
+        gap:18px!important;
+        align-items:start!important;
+      }
+
+      .side > .info-card{
+        grid-area:current!important;
+      }
+
+      .side > .location-details-extended{
+        grid-area:details!important;
+        align-self:stretch!important;
+        height:100%!important;
+        display:flex!important;
+        flex-direction:column!important;
+      }
+
+      .side > .wind-card{
+        grid-area:wind!important;
+      }
+
+      /* Use the height of the right card meaningfully rather than leaving
+         a dead block at its bottom. */
+      .location-details-extended .detail-group{
+        flex:0 0 auto;
+      }
+
+      .location-details-extended .daylight-group{
+        margin-top:auto!important;
+      }
+
+      .location-details-extended > .note{
+        margin-top:12px!important;
+      }
+
+      /* Current conditions card remains compact: no row stretching. */
+      .info-card{
+        display:block!important;
+      }
+
+      .info-card .note{
+        margin-bottom:0!important;
+      }
+
+      /* Wind card uses its own space tightly and does not inherit a tall row. */
+      .wind-card .wind-dial-wrap{
+        height:clamp(250px,34vw,310px)!important;
+        min-height:250px!important;
+        flex:0 0 auto!important;
+      }
+    }
+
+    /* Desktop side column: natural content height, no forced blank card bottoms. */
+    @media(min-width:1051px){
+      .side{
+        align-content:start!important;
+        grid-auto-rows:auto!important;
+      }
+    }
+
+    /* Phone/app: one clean vertical column. */
+    @media(max-width:760px){
+      .side{
+        display:flex!important;
+        flex-direction:column!important;
+        gap:14px!important;
+      }
+
+      .side > .info-card,
+      .side > .location-details-extended,
+      .side > .wind-card{
+        width:100%!important;
+        height:auto!important;
+      }
+
+      .wind-card .wind-dial-wrap{
+        height:280px!important;
+        min-height:280px!important;
+      }
+    }
+
+    /* Keep the two bottom analytical cards visually equal without artificial
+       empty bottoms: notes sit at the card bottom and plots consume the middle. */
+    @media(min-width:901px){
+      .analytics-grid > .chart-card{
+        height:clamp(500px,40vw,610px)!important;
+        display:flex!important;
+        flex-direction:column!important;
+      }
+
+      .analytics-grid > .chart-card > .chart-wrap{
+        flex:1 1 0!important;
+        min-height:0!important;
+      }
+
+      .analytics-grid > .chart-card > .chart-note{
+        margin-top:10px!important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="header">
+      <div>
+        <div class="eyebrow">Global Weather & Atmospheric Explorer</div>
+        <h1>WeatherScope</h1>
+        <p class="sub">
+          <strong>Explore weather anywhere on Earth.</strong> WeatherScope brings current weather, annual weather patterns,
+          wind conditions, air quality, elevation and short-term forecasts together in one interactive global experience.
+          Select any location on the map to explore its atmospheric and geographic conditions through dynamic visualizations.
+        </p>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="themeBtn" type="button" aria-pressed="false">☀️ Light Mode</button>
+        <button class="btn" id="soundBtn" type="button" aria-pressed="true">🔊 Interaction Sound</button>
+        <button class="btn" id="indiaBtn" type="button">🌍 Recenter World</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card map-card">
+        <div class="section-head">
+          <div>
+            <div class="label">Interactive Map</div>
+            <h2>Select a Location</h2>
+          </div>
+          <div class="pill" id="mapState">Ready</div>
+        </div>
+
+        <div id="map"></div>
+
+        <div class="map-tip">
+          <span>Desktop: click-drag to pan • +/− to zoom</span>
+          <span>Mobile: one-finger pan • pinch zoom • tap to select</span>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="card info-card">
+          <div class="label">Selected Location</div>
+          <div class="place-name" id="placeName">New Delhi, India</div>
+          <div class="coords" id="coords">28.614°N, 77.209°E</div>
+
+          <div class="metrics weather-metrics">
+            <div class="metric-box">
+              <small>Temperature</small>
+              <div class="metric-value" id="currentTemp">-- °C</div>
+            </div>
+            <div class="metric-box">
+              <small>Precipitation</small>
+              <div class="metric-value" id="currentRain">-- mm</div>
+            </div>
+            <div class="metric-box">
+              <small>Relative Humidity</small>
+              <div class="metric-value" id="currentHumidity">-- %</div>
+            </div>
+            <div class="metric-box">
+              <small>Solar Radiation</small>
+              <div class="metric-value" id="currentSolar">-- W/m²</div>
+            </div>
+          </div>
+
+          <div class="bar-block">
+            <div class="bar-row"><span>Temperature</span><strong id="tempBarText">--</strong></div>
+            <div class="track"><div class="fill temp-fill" id="tempBar"></div></div>
+          </div>
+
+          <div class="bar-block">
+            <div class="bar-row"><span>Precipitation</span><strong id="rainBarText">--</strong></div>
+            <div class="track"><div class="fill rain-fill" id="rainBar"></div></div>
+          </div>
+
+          <div class="note" id="statusText">
+            Click or tap the map to choose a location.
+          </div>
+        </section>
+
+        <section class="card details-card location-details-extended">
+          <div class="label">Location Details</div>
+
+          <div class="detail-group">
+            <div class="detail-group-title">Geography & Demography</div>
+            <div class="detail-grid">
+              <div class="detail-item visual-detail">
+                <div class="detail-icon contour-icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="img">
+                    <path d="M7 45c7-13 14-21 25-21 9 0 13 7 25 7" />
+                    <path d="M8 52c9-9 15-15 25-15 8 0 13 4 23 4" />
+                    <path d="M12 36c5-8 11-13 20-13 8 0 11 5 20 5" />
+                    <path d="M18 28c3-4 7-7 13-7 6 0 9 3 14 4" />
+                  </svg>
+                </div>
+                <div class="detail-copy">
+                  <span>Elevation</span>
+                  <strong id="elevationValue">-- m</strong>
+                </div>
+              </div>
+
+              <div class="detail-item visual-detail">
+                <div class="detail-icon visibility-icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="img">
+                    <path d="M7 32s9-13 25-13 25 13 25 13-9 13-25 13S7 32 7 32z"/>
+                    <circle cx="32" cy="32" r="7"/>
+                  </svg>
+                </div>
+                <div class="detail-copy">
+                  <span>Visibility</span>
+                  <strong id="visibilityValue">-- km</strong>
+                </div>
+              </div>
+
+              <div class="detail-item visual-detail detail-span-2">
+                <div class="detail-icon people-icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="img">
+                    <circle cx="19" cy="19" r="6"/>
+                    <circle cx="32" cy="15" r="7"/>
+                    <circle cx="46" cy="20" r="6"/>
+                    <path d="M10 46c1-10 5-16 9-16s8 6 9 16"/>
+                    <path d="M20 48c1-13 5-21 12-21s11 8 12 21"/>
+                    <path d="M38 46c1-10 4-16 8-16s8 6 9 16"/>
+                  </svg>
+                </div>
+                <div class="detail-copy">
+                  <span>Population · within 1 km radius</span>
+                  <strong id="populationValue" aria-live="polite">Not available</strong>
+                  <span id="populationDensity">Density: —</span>
+                  <label for="populationYear">Data year </label>
+                  <select id="populationYear" aria-label="WorldPop data year"><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020" selected>2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option></select>
+                  <span id="populationSource">WorldPop Global 2 · 100 m · modelled estimate</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-group">
+            <div class="detail-group-title">Administrative</div>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <span>District / County</span>
+                <strong id="districtValue">--</strong>
+              </div>
+              <div class="detail-item">
+                <span>State / Region</span>
+                <strong id="stateValue">--</strong>
+              </div>
+              <div class="detail-item">
+                <span>Country</span>
+                <strong id="countryValue">--</strong>
+              </div>
+              <div class="detail-item">
+                <span>Administrative Level</span>
+                <strong id="adminValue">Best available</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-group celestial-group sun-group">
+            <div class="detail-group-title">Sun</div>
+            <div class="celestial-grid">
+              <div class="celestial-item">
+                <span class="celestial-symbol" aria-hidden="true">☀</span>
+                <div><span>Sunrise</span><strong id="sunriseValue">--</strong></div>
+              </div>
+              <div class="celestial-item">
+                <span class="celestial-symbol sunset-symbol" aria-hidden="true">◒</span>
+                <div><span>Sunset</span><strong id="sunsetValue">--</strong></div>
+              </div>
+              <div class="celestial-item">
+                <span class="celestial-symbol uv-symbol" aria-hidden="true">UV</span>
+                <div><span>UV Index</span><strong id="uvValue">--</strong><small id="uvCategory">--</small></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-group celestial-group moon-group">
+            <div class="detail-group-title">Moon</div>
+            <div class="moon-layout">
+              <div class="moon-phase-card">
+                <div class="moon-disc" id="moonDisc" aria-hidden="true">◐</div>
+                <div class="moon-phase-copy">
+                  <span>Moon Phase</span>
+                  <strong id="moonPhaseValue">--</strong>
+                  <small id="moonIlluminationValue">-- illuminated</small>
+                </div>
+              </div>
+              <div class="moon-times">
+                <div><span>Moonrise</span><strong id="moonriseValue">--</strong></div>
+                <div><span>Moonset</span><strong id="moonsetValue">--</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-group daylight-group">
+            <div class="detail-group-title">Day Length</div>
+            <div class="daylight-card">
+              <div class="daylight-main">
+                <span>Daylight duration</span>
+                <strong id="dayLengthValue">--</strong>
+              </div>
+              <div class="daylight-track" aria-hidden="true"><div class="daylight-fill" id="dayLengthFill"></div></div>
+            </div>
+          </div>
+
+          <div class="note">
+            Population uses WorldPop estimates within 1 km of the selected point, not administrative totals. Astronomical times are shown for the selected location and local timezone.
+          </div>
+        </section>
+
+        <section class="card details-card wind-card">
+          <div class="section-head">
+            <div>
+              <div class="label">Wind Conditions</div>
+              <h3>Wind Dial</h3>
+            </div>
+            <button class="chart-download" id="downloadWind" type="button" title="Download wind dial as PNG">⇩ Download PNG</button>
+          </div>
+          <div class="wind-dial-wrap">
+            <canvas id="windDial" width="420" height="420"></canvas>
+          </div>
+          <div class="wind-readout">
+            <div><span>Speed</span><strong id="windSpeedValue">-- km/h</strong></div>
+            <div><span>Direction</span><strong id="windDirectionValue">--°</strong></div>
+          </div>
+          <div class="chart-note">The dial indicates current wind direction while the central readout shows wind speed.</div>
+        </section>
+
+      </aside>
+
+      <section class="analytics-grid">
+        <section class="card chart-card">
+          <div class="section-head">
+            <div>
+              <div class="label">Weather Conditions</div>
+              <h3>Annual Weather Profile</h3>
+            </div>
+            <button class="chart-download" id="downloadMonthly" type="button" title="Download chart as PNG">⇩ Download PNG</button>
+          </div>
+          <div class="chart-wrap radial-weather-wrap"><canvas id="monthlyWeatherCanvas"></canvas><div id="monthlyWeatherTooltip" class="weather-tooltip"></div></div>
+          <div class="chart-note">
+            Each month forms one sector. Four radial bars show temperature, precipitation, humidity and solar radiation; hover or tap any bar for the original value and unit.
+          </div>
+        </section>
+
+        <section class="card chart-card">
+          <div class="section-head">
+            <div>
+              <div class="label">Air Quality</div>
+              <h3>Current Air Quality</h3>
+            </div>
+            <div class="section-actions">
+              <div class="pill" id="airState">Open-Meteo / CAMS</div>
+              <button class="chart-download" id="downloadAir" type="button" title="Download chart as PNG">⇩ Download PNG</button>
+            </div>
+          </div>
+
+          <div class="air-summary">
+            <div class="air-chip"><span>CO₂</span><strong id="co2Value">-- ppm</strong></div>
+            <div class="air-chip"><span>NO₂</span><strong id="no2Value">-- µg/m³</strong></div>
+            <div class="air-chip"><span>PM₂.₅</span><strong id="pm25Value">-- µg/m³</strong></div>
+            <div class="air-chip"><span>PM₁₀</span><strong id="pm10Value">-- µg/m³</strong></div>
+          </div>
+
+          <div class="chart-wrap"><canvas id="airChart"></canvas></div>
+          <div class="chart-note">
+            Air-quality values are model-based atmospheric data from CAMS via Open-Meteo, not readings from a nearby physical sensor.
+            CO₂ uses ppm; NO₂ and particulate matter use µg/m³.
+          </div>
+        </section>
+      </section>
+
+      <section class="card wide-card">
+        <div class="section-head">
+          <div>
+            <div class="label">Weather Forecast</div>
+            <h3>7-Day Outlook</h3>
+          </div>
+          <div class="section-actions">
+            <div class="pill" id="forecastState">Open-Meteo</div>
+            <button class="chart-download" id="downloadForecast" type="button" title="Download chart as PNG">⇩ Download PNG</button>
+          </div>
+        </div>
+        <div class="wide-chart forecast-chart-shell">
+          <canvas id="forecastChart"></canvas>
+          <div class="forecast-snapshot" id="forecastSnapshot" aria-label="7-day forecast summary">
+            <div class="forecast-snapshot-title">7-Day Snapshot</div>
+            <div class="forecast-snapshot-grid">
+              <div class="forecast-snapshot-item">
+                <span>Avg High</span>
+                <strong id="forecastAvgTemp">-- °C</strong>
+              </div>
+              <div class="forecast-snapshot-item">
+                <span>Total Rain</span>
+                <strong id="forecastTotalRain">-- mm</strong>
+              </div>
+              <div class="forecast-snapshot-item">
+                <span>Avg Humidity</span>
+                <strong id="forecastAvgHumidity">-- %</strong>
+              </div>
+              <div class="forecast-snapshot-item">
+                <span>Solar Total</span>
+                <strong id="forecastSolarTotal">-- MJ/m²</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Map: OpenStreetMap + Leaflet • weather, wind, air quality and elevation: Open-Meteo • reverse geocoding: Nominatim</span>
+      <span>Population: WorldPop Global 2 · selected year · 1 km radius. Future years are projections.</span>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/suncalc@1.9.0/suncalc.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <script>
+    const INDIA_CENTER = [20, 0];
+    const DELHI = [28.6139, 77.2090];
+
+    const $ = id => document.getElementById(id);
+
+    const ui = {
+      placeName:$("placeName"), coords:$("coords"),
+      currentTemp:$("currentTemp"), currentRain:$("currentRain"), currentHumidity:$("currentHumidity"), currentSolar:$("currentSolar"),
+      tempBar:$("tempBar"), rainBar:$("rainBar"),
+      tempBarText:$("tempBarText"), rainBarText:$("rainBarText"),
+      statusText:$("statusText"), mapState:$("mapState"),
+      elevationValue:$("elevationValue"), visibilityValue:$("visibilityValue"), populationValue:$("populationValue"),
+      sunriseValue:$("sunriseValue"), sunsetValue:$("sunsetValue"), uvValue:$("uvValue"), uvCategory:$("uvCategory"),
+      moonPhaseValue:$("moonPhaseValue"), moonIlluminationValue:$("moonIlluminationValue"),
+      moonriseValue:$("moonriseValue"), moonsetValue:$("moonsetValue"),
+      dayLengthValue:$("dayLengthValue"), dayLengthFill:$("dayLengthFill"), moonDisc:$("moonDisc"),
+      districtValue:$("districtValue"), stateValue:$("stateValue"),
+      countryValue:$("countryValue"), adminValue:$("adminValue"),
+      co2Value:$("co2Value"), no2Value:$("no2Value"),
+      pm25Value:$("pm25Value"), pm10Value:$("pm10Value"),
+      airState:$("airState"), forecastState:$("forecastState"), windSpeedValue:$("windSpeedValue"), windDirectionValue:$("windDirectionValue"),
+      themeBtn:$("themeBtn"), soundBtn:$("soundBtn"), indiaBtn:$("indiaBtn")
+    };
+
+    let marker=null, forecastChart=null, airChart=null; let monthlyWeatherData=null; let monthlyWeatherHover=null; let windDialState={speed:null,direction:null};
+    let soundOn=true, audioCtx=null, lastSound=0;
+
+    const map = L.map("map", {
+      center: INDIA_CENTER,
+      zoom: 2,
+      minZoom: 2,
+      maxZoom: 12,
+      zoomControl:true,
+      dragging:true,
+      touchZoom:true,
+      doubleClickZoom:true,
+      scrollWheelZoom:false,
+      keyboard:true
+    });
+
+    const osmTiles = L.tileLayer(
+      "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        maxZoom:19,
+        attribution:"&copy; OpenStreetMap contributors",
+        className:"osm-map-tiles"
+      }
+    ).addTo(map);
+
+    function ensureAudio(){
+      try{
+        if(!audioCtx){
+          const Ctx=window.AudioContext||window.webkitAudioContext;
+          if(!Ctx) return null;
+          audioCtx=new Ctx();
+        }
+        if(audioCtx.state==="suspended") audioCtx.resume();
+        return audioCtx;
+      }catch(_){return null}
+    }
+
+    function tak(strength=1){
+      if(!soundOn) return;
+      const now=performance.now();
+      if(now-lastSound<70) return;
+      lastSound=now;
+      const ctx=ensureAudio();
+      if(!ctx) return;
+
+      const t=ctx.currentTime;
+      const osc=ctx.createOscillator();
+      const gain=ctx.createGain();
+      osc.type="triangle";
+      osc.frequency.setValueAtTime(850,t);
+      osc.frequency.exponentialRampToValueAtTime(260,t+.055);
+      gain.gain.setValueAtTime(.0001,t);
+      gain.gain.exponentialRampToValueAtTime(.05*strength,t+.004);
+      gain.gain.exponentialRampToValueAtTime(.0001,t+.065);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t); osc.stop(t+.07);
+    }
+
+    const hoverIndexState={};
+
+    function legoClick(strength=.78){
+      if(!soundOn) return;
+      const ctx=ensureAudio();
+      if(!ctx) return;
+      const now=performance.now();
+      if(now-lastSound<58) return;
+      lastSound=now;
+      const t=ctx.currentTime;
+      const master=ctx.createGain();
+      const lowpass=ctx.createBiquadFilter();
+      lowpass.type="lowpass";
+      lowpass.frequency.setValueAtTime(1100,t);
+      lowpass.Q.setValueAtTime(.65,t);
+      master.gain.setValueAtTime(.0001,t);
+      master.gain.exponentialRampToValueAtTime(.095*strength,t+.003);
+      master.gain.exponentialRampToValueAtTime(.0001,t+.095);
+      master.connect(lowpass); lowpass.connect(ctx.destination);
+
+      const body=ctx.createOscillator();
+      body.type="triangle";
+      body.frequency.setValueAtTime(275,t);
+      body.frequency.exponentialRampToValueAtTime(145,t+.078);
+      const knock=ctx.createOscillator();
+      knock.type="square";
+      knock.frequency.setValueAtTime(500,t);
+      knock.frequency.exponentialRampToValueAtTime(240,t+.048);
+      const gBody=ctx.createGain(); const gKnock=ctx.createGain();
+      gBody.gain.setValueAtTime(.64,t); gBody.gain.exponentialRampToValueAtTime(.05,t+.092);
+      gKnock.gain.setValueAtTime(.17,t); gKnock.gain.exponentialRampToValueAtTime(.02,t+.052);
+      body.connect(gBody); gBody.connect(master); knock.connect(gKnock); gKnock.connect(master);
+      body.start(t); body.stop(t+.10); knock.start(t+.002); knock.stop(t+.058);
+    }
+
+    function handleChartBarHover(chartKey,activeElements){
+      if(!activeElements || !activeElements.length){
+        hoverIndexState[chartKey]=null;
+        return;
+      }
+      const item=activeElements[0];
+      const key=item.datasetIndex+":"+item.index;
+      if(hoverIndexState[chartKey]!==key){
+        hoverIndexState[chartKey]=key;
+        legoClick(.82);
+      }
+    }
+
+
+    function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
+    function iso(d){return d.toISOString().slice(0,10)}
+
+    function safeText(v,fallback="--"){
+      return v===undefined||v===null||v==="" ? fallback : String(v);
+    }
+
+    function formatPopulation(v){
+      const n=Number(String(v).replace(/[^\d.]/g,""));
+      if(!Number.isFinite(n)||n<=0) return "Not available";
+      return new Intl.NumberFormat("en-IN").format(Math.round(n));
+    }
+
+    function setBars(temp,rain){
+      ui.tempBar.style.width=clamp(((temp+10)/60)*100,0,100)+"%";
+      ui.rainBar.style.width=clamp((rain/50)*100,0,100)+"%";
+      ui.tempBarText.textContent=temp.toFixed(1)+" °C";
+      ui.rainBarText.textContent=rain.toFixed(1)+" mm";
+      ui.currentTemp.textContent=temp.toFixed(1)+" °C";
+      ui.currentRain.textContent=rain.toFixed(1)+" mm";
+    }
+
+    function monthLabel(key){
+      const [y,m]=key.split("-").map(Number);
+      return new Date(Date.UTC(y,m-1,1)).toLocaleString("en",{month:"short"});
+    }
+
+    function aggregateMonthly(daily){
+      const bucket=new Map();
+      daily.time.forEach((date,i)=>{
+        const key=date.slice(0,7);
+        if(!bucket.has(key)) bucket.set(key,{t:0,tn:0,p:0,h:0,hn:0,s:0,sn:0});
+        const r=bucket.get(key);
+        const tv=Number(daily.temperature_2m_mean?.[i]);
+        const pv=Number(daily.precipitation_sum?.[i]);
+        const hv=Number(daily.relative_humidity_2m_mean?.[i]);
+        const sv=Number(daily.shortwave_radiation_sum?.[i]);
+        if(Number.isFinite(tv)){r.t+=tv;r.tn++}
+        if(Number.isFinite(pv)) r.p+=pv;
+        if(Number.isFinite(hv)){r.h+=hv;r.hn++}
+        if(Number.isFinite(sv)){r.s+=sv;r.sn++}
+      });
+      const keys=[...bucket.keys()].sort().slice(-12);
+      return {
+        labels:keys.map(monthLabel),
+        temps:keys.map(k=>+(bucket.get(k).t/Math.max(1,bucket.get(k).tn)).toFixed(1)),
+        rain:keys.map(k=>+bucket.get(k).p.toFixed(1)),
+        humidity:keys.map(k=>+(bucket.get(k).h/Math.max(1,bucket.get(k).hn)).toFixed(1)),
+        solar:keys.map(k=>+(bucket.get(k).s/Math.max(1,bucket.get(k).sn)).toFixed(1))
+      };
+    }
+
+    function normalize(values){
+      const finite=values.filter(Number.isFinite);
+      const min=Math.min(...finite), max=Math.max(...finite);
+      if(!Number.isFinite(min)||!Number.isFinite(max)||min===max) return values.map(()=>50);
+      return values.map(v=>((v-min)/(max-min))*100);
+    }
+
+
+    
+    function responsiveChartFont(base=12){
+      const w=Math.max(320,window.innerWidth||1024);
+      const bump=w>=1400?2:(w>=900?1:0);
+      return base+bump;
+    }
+
+function chartTheme(){
+      const light=document.body.classList.contains("light-theme");
+      return {
+        text: light ? "#2a2430" : "#ece9f4",
+        muted: light ? "#645d6b" : "#aba7b7",
+        grid: light ? "rgba(55,45,65,.14)" : "rgba(255,255,255,.11)",
+        gridSoft: light ? "rgba(55,45,65,.10)" : "rgba(255,255,255,.08)",
+        tooltipBg: light ? "#ffffff" : "#111118",
+        tooltipText: light ? "#211c26" : "#ffffff",
+        tooltipBorder: light ? "#d9d4df" : "#36313f"
+      };
+    }
+
+    function refreshChartThemes(){
+      const t=chartTheme();
+      if(monthlyWeatherData) drawMonthlyWeather(1);
+      drawWindDial();
+      if(forecastChart){forecastChart.options.plugins.legend.labels.color=t.text;forecastChart.options.scales.x.ticks.color=t.muted;forecastChart.options.scales.yTemp.grid.color=t.gridSoft;forecastChart.options.plugins.tooltip.backgroundColor=t.tooltipBg;forecastChart.options.plugins.tooltip.titleColor=t.tooltipText;forecastChart.options.plugins.tooltip.bodyColor=t.tooltipText;forecastChart.options.plugins.tooltip.borderColor=t.tooltipBorder;forecastChart.options.plugins.tooltip.borderWidth=1;forecastChart.update("none")}
+      if(airChart){if(airChart.options.plugins.legend&&airChart.options.plugins.legend.labels)airChart.options.plugins.legend.labels.color=t.text;airChart.options.scales.x.ticks.color=t.muted;airChart.options.scales.co2.grid.color=t.gridSoft;airChart.options.plugins.tooltip.backgroundColor=t.tooltipBg;airChart.options.plugins.tooltip.titleColor=t.tooltipText;airChart.options.plugins.tooltip.bodyColor=t.tooltipText;airChart.options.plugins.tooltip.borderColor=t.tooltipBorder;airChart.options.plugins.tooltip.borderWidth=1;airChart.update("none")}
+    }
+
+    function downloadCanvas(canvas,filename){
+      if(!canvas)return;const rect=canvas.getBoundingClientRect(),light=document.body.classList.contains("light-theme"),out=document.createElement("canvas"),scale=2;
+      out.width=Math.max(1,Math.round(rect.width*scale));out.height=Math.max(1,Math.round(rect.height*scale));const ctx=out.getContext("2d");ctx.scale(scale,scale);ctx.fillStyle=light?"#ffffff":"#0d0d13";ctx.fillRect(0,0,rect.width,rect.height);ctx.drawImage(canvas,0,0,rect.width,rect.height);const link=document.createElement("a");link.download=filename;link.href=out.toDataURL("image/png",1);link.click();
+    }
+
+    function downloadChart(chart, filename){
+      if(!chart){
+        ui.statusText.textContent="This chart is not available yet. Select a location and allow the data to load first.";
+        return;
+      }
+
+      const sourceCanvas=chart.canvas;
+      const out=document.createElement("canvas");
+      const scale=2;
+      out.width=sourceCanvas.width*scale;
+      out.height=sourceCanvas.height*scale;
+      const ctx=out.getContext("2d");
+      const light=document.body.classList.contains("light-theme");
+
+      ctx.scale(scale,scale);
+      ctx.fillStyle=light ? "#ffffff" : "#0d0d13";
+      ctx.fillRect(0,0,sourceCanvas.width,sourceCanvas.height);
+      ctx.drawImage(sourceCanvas,0,0);
+
+      const link=document.createElement("a");
+      link.download=filename;
+      link.href=out.toDataURL("image/png",1.0);
+      link.click();
+    }
+
+    function getWeatherCanvas(){ return $("monthlyWeatherCanvas"); }
+
+    function weatherMetricDefs(){
+      return [
+        {key:"temps",label:"Temperature",unit:" °C",color:"#ff4db5"},
+        {key:"rain",label:"Precipitation",unit:" mm",color:"#8b63ff"},
+        {key:"humidity",label:"Humidity",unit:" %",color:"#42d8ff"},
+        {key:"solar",label:"Solar radiation",unit:" MJ/m²",color:"#ffcc66"}
+      ];
+    }
+
+    function drawMonthlyWeather(progress=1){
+      const canvas=getWeatherCanvas();
+      if(!canvas || !monthlyWeatherData) return;
+      const rect=canvas.getBoundingClientRect();
+      const dpr=Math.max(1,window.devicePixelRatio||1);
+      const w=Math.max(320,rect.width||700), h=Math.max(300,rect.height||390);
+      canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
+      const ctx=canvas.getContext("2d"); ctx.setTransform(dpr,0,0,dpr,0,0);
+      const light=document.body.classList.contains("light-theme");
+      const text=light?"#2a2430":"#ece9f4", muted=light?"#716a77":"#aaa6b6";
+      const grid=light?"rgba(55,45,65,.12)":"rgba(255,255,255,.10)";
+      ctx.clearRect(0,0,w,h);
+      const cx=w/2, cy=h/2-2, outer=Math.min(w,h)*0.36, inner=Math.max(54,outer*0.34), band=outer-inner;
+      const months=monthlyWeatherData.labels, defs=weatherMetricDefs();
+      const norms={temps:normalize(monthlyWeatherData.temps),rain:normalize(monthlyWeatherData.rain),humidity:normalize(monthlyWeatherData.humidity),solar:normalize(monthlyWeatherData.solar)};
+
+      ctx.lineWidth=1;
+      [0,.25,.5,.75,1].forEach(fr=>{ctx.beginPath();ctx.strokeStyle=grid;ctx.arc(cx,cy,inner+band*fr,0,Math.PI*2);ctx.stroke();});
+
+      const sector=(Math.PI*2)/12;
+      ctx.font='600 12px Inter, system-ui, sans-serif';ctx.textAlign="center";ctx.textBaseline="middle";
+      for(let i=0;i<12;i++){
+        const mid=-Math.PI/2+(i+.5)*sector;
+        ctx.fillStyle=muted;ctx.fillText(months[i]||"",cx+Math.cos(mid)*(outer+18),cy+Math.sin(mid)*(outer+18));
+        const a=-Math.PI/2+i*sector;
+        ctx.beginPath();ctx.strokeStyle=grid;ctx.moveTo(cx+Math.cos(a)*(inner-4),cy+Math.sin(a)*(inner-4));ctx.lineTo(cx+Math.cos(a)*(outer+3),cy+Math.sin(a)*(outer+3));ctx.stroke();
+      }
+
+      ctx.beginPath();ctx.fillStyle=light?"rgba(248,246,251,.98)":"rgba(13,13,19,.99)";ctx.arc(cx,cy,inner-8,0,Math.PI*2);ctx.fill();ctx.strokeStyle=grid;ctx.stroke();
+      ctx.fillStyle=text;ctx.font='800 14px Inter, system-ui, sans-serif';ctx.fillText("12 MONTHS",cx,cy-7);
+      ctx.fillStyle=muted;ctx.font='600 11px Inter, system-ui, sans-serif';ctx.fillText("Weather profile",cx,cy+10);
+
+      const gap=.010, usable=sector*.76, barAngle=(usable-gap*3)/4, records=[];
+      for(let i=0;i<12;i++){
+        const startBase=-Math.PI/2+i*sector+(sector-usable)/2;
+        defs.forEach((d,j)=>{
+          const val=norms[d.key][i]||0, start=startBase+j*(barAngle+gap), end=start+barAngle;
+          const baseR2=inner + band*(.12+.88*(val/100))*progress;
+          const active=monthlyWeatherHover && monthlyWeatherHover.month===i && monthlyWeatherHover.metric===j;
+          const hoverLift=active ? Math.max(7,band*.075) : 0;
+          const r2=Math.min(outer+8,baseR2+hoverLift);
+          const angularLift=active ? .006 : 0;
+          const drawStart=start-angularLift, drawEnd=end+angularLift;
+          ctx.beginPath();ctx.arc(cx,cy,r2,drawStart,drawEnd);ctx.arc(cx,cy,inner,drawEnd,drawStart,true);ctx.closePath();
+          ctx.fillStyle=d.color+(active?"ff":"b8");ctx.fill();
+          if(active){
+            ctx.save();
+            ctx.shadowBlur=18;
+            ctx.shadowColor=d.color;
+            ctx.strokeStyle=d.color;
+            ctx.lineWidth=1.7;
+            ctx.stroke();
+            ctx.restore();
+          }
+          records.push({month:i,metric:j,start:drawStart,end:drawEnd,r1:inner,r2,value:monthlyWeatherData[d.key][i],def:d});
+        });
+      }
+      canvas._weatherHitRecords=records;
+
+      const legendY=h-10; let lx=Math.max(10,cx-190);
+      ctx.textAlign="left";ctx.font='600 11px Inter, system-ui, sans-serif';
+      defs.forEach(d=>{ctx.fillStyle=d.color;ctx.beginPath();ctx.arc(lx,legendY,4,0,Math.PI*2);ctx.fill();ctx.fillStyle=muted;ctx.fillText(d.label,lx+8,legendY);lx += ctx.measureText(d.label).width+32;});
+    }
+
+    function renderMonthly(data){
+      monthlyWeatherData=data;monthlyWeatherHover=null;
+      const start=performance.now(),dur=720;
+      function animate(now){const p=Math.min(1,(now-start)/dur),eased=1-Math.pow(1-p,3);drawMonthlyWeather(eased);if(p<1)requestAnimationFrame(animate)}
+      requestAnimationFrame(animate);
+    }
+
+    function initMonthlyWeatherInteractions(){
+      const canvas=getWeatherCanvas();if(!canvas||canvas._weatherBound)return;canvas._weatherBound=true;
+      const tooltip=$("monthlyWeatherTooltip");
+      function hitTest(evt){
+        if(!monthlyWeatherData)return null;
+        const rect=canvas.getBoundingClientRect(),x=evt.clientX-rect.left,y=evt.clientY-rect.top,cx=rect.width/2,cy=rect.height/2-2;
+        const dx=x-cx,dy=y-cy,r=Math.hypot(dx,dy);let a=Math.atan2(dy,dx);if(a< -Math.PI/2)a+=Math.PI*2;
+        return (canvas._weatherHitRecords||[]).find(rec=>{let aa=a,s=rec.start,e=rec.end;while(aa<s)aa+=Math.PI*2;return aa>=s&&aa<=e&&r>=rec.r1&&r<=rec.r2})||null;
+      }
+      canvas.addEventListener("pointermove",evt=>{
+        const hit=hitTest(evt),next=hit?{month:hit.month,metric:hit.metric}:null,changed=JSON.stringify(next)!==JSON.stringify(monthlyWeatherHover);
+        if(changed&&hit)legoClick(.78);monthlyWeatherHover=next;drawMonthlyWeather(1);
+        if(hit){const month=monthlyWeatherData.labels[hit.month];tooltip.innerHTML="<strong>"+month+" · "+hit.def.label+"</strong><span>"+hit.value+hit.def.unit+"</span>";const rect=canvas.getBoundingClientRect();tooltip.style.left=(evt.clientX-rect.left+12)+"px";tooltip.style.top=(evt.clientY-rect.top+12)+"px";tooltip.classList.add("show")}else tooltip.classList.remove("show");
+      });
+      canvas.addEventListener("pointerleave",()=>{monthlyWeatherHover=null;tooltip.classList.remove("show");drawMonthlyWeather(1)});
+    }
+
+    function windCardinal(deg){
+      const dirs=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+      return dirs[Math.round((((deg%360)+360)%360)/22.5)%16];
+    }
+
+    function drawWindDial(){
+      const canvas=$("windDial");if(!canvas)return;
+      const rect=canvas.getBoundingClientRect(),dpr=Math.max(1,window.devicePixelRatio||1),w=rect.width||300,h=rect.height||300;
+      canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
+      const ctx=canvas.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
+      const cx=w/2,cy=h/2,r=Math.min(w,h)*.39,light=document.body.classList.contains("light-theme");
+      const text=light?"#211c26":"#f6f4fb",muted=light?"#645d6b":"#aaa6b6",grid=light?"rgba(55,45,65,.14)":"rgba(255,255,255,.12)";
+      ctx.clearRect(0,0,w,h);
+      [1,.82,.62].forEach(fr=>{ctx.beginPath();ctx.strokeStyle=grid;ctx.lineWidth=1;ctx.arc(cx,cy,r*fr,0,Math.PI*2);ctx.stroke()});
+      for(let i=0;i<36;i++){const a=-Math.PI/2+i*(Math.PI*2/36),major=i%9===0,r1=r-(major?12:7);ctx.beginPath();ctx.strokeStyle=major?text:grid;ctx.lineWidth=major?1.8:1;ctx.moveTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);ctx.stroke()}
+      ctx.fillStyle=muted;ctx.font='700 13px Inter, system-ui, sans-serif';ctx.textAlign="center";ctx.textBaseline="middle";
+      [["N",0,-1],["E",1,0],["S",0,1],["W",-1,0]].forEach(([t,dx,dy])=>ctx.fillText(t,cx+dx*(r+20),cy+dy*(r+20)));
+      const deg=Number(windDialState.direction),speed=Number(windDialState.speed);
+      if(Number.isFinite(deg)){const a=(deg-90)*Math.PI/180;ctx.save();ctx.translate(cx,cy);ctx.rotate(a);ctx.beginPath();ctx.moveTo(r*.76,0);ctx.lineTo(r*.42,-8);ctx.lineTo(r*.42,8);ctx.closePath();ctx.fillStyle="#ff4db5";ctx.shadowBlur=14;ctx.shadowColor="#ff4db5";ctx.fill();ctx.restore()}
+      ctx.beginPath();ctx.fillStyle=light?"#ffffff":"#101017";ctx.arc(cx,cy,r*.37,0,Math.PI*2);ctx.fill();ctx.strokeStyle=grid;ctx.stroke();
+      ctx.fillStyle=text;ctx.font='800 27px Inter, system-ui, sans-serif';ctx.fillText(Number.isFinite(speed)?speed.toFixed(1):"--",cx,cy-8);
+      ctx.fillStyle=muted;ctx.font='700 12px Inter, system-ui, sans-serif';ctx.fillText("km/h",cx,cy+13);
+      if(Number.isFinite(deg)){ctx.fillStyle="#ff4db5";ctx.font='800 13px Inter, system-ui, sans-serif';ctx.fillText(windCardinal(deg)+" · "+Math.round(deg)+"°",cx,cy+34)}
+    }
+
+    function renderForecast(daily){
+      if(forecastChart) forecastChart.destroy();
+
+      const validNums = arr => (arr||[]).map(Number).filter(Number.isFinite);
+      const mean = arr => {
+        const v=validNums(arr);
+        return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null;
+      };
+      const sum = arr => {
+        const v=validNums(arr);
+        return v.length ? v.reduce((a,b)=>a+b,0) : null;
+      };
+
+      const avgTemp=mean(daily.temperature_2m_max);
+      const totalRain=sum(daily.precipitation_sum);
+      const avgHumidity=mean(daily.relative_humidity_2m_mean);
+      const solarTotal=sum(daily.shortwave_radiation_sum);
+
+      const avgTempEl=$("forecastAvgTemp");
+      const totalRainEl=$("forecastTotalRain");
+      const avgHumidityEl=$("forecastAvgHumidity");
+      const solarTotalEl=$("forecastSolarTotal");
+
+      if(avgTempEl) avgTempEl.textContent=avgTemp==null?"-- °C":avgTemp.toFixed(1)+" °C";
+      if(totalRainEl) totalRainEl.textContent=totalRain==null?"-- mm":totalRain.toFixed(1)+" mm";
+      if(avgHumidityEl) avgHumidityEl.textContent=avgHumidity==null?"-- %":Math.round(avgHumidity)+" %";
+      if(solarTotalEl) solarTotalEl.textContent=solarTotal==null?"-- MJ/m²":solarTotal.toFixed(1)+" MJ/m²";
+      const labels=daily.time.map(d=>new Date(d+"T00:00:00Z").toLocaleDateString("en",{weekday:"short",month:"short",day:"numeric"}));
+      forecastChart=new Chart($("forecastChart"),{
+        data:{labels,datasets:[
+          {type:"bar",label:"Precipitation (mm)",data:daily.precipitation_sum,yAxisID:"yRain",backgroundColor:"rgba(133,87,255,.52)",borderColor:"#8b63ff",borderRadius:8},
+          {type:"line",label:"Max temperature (°C)",data:daily.temperature_2m_max,yAxisID:"yTemp",borderColor:"#ff4db5",backgroundColor:"#ff4db5",tension:.32},
+          {type:"line",label:"Humidity (%)",data:daily.relative_humidity_2m_mean,yAxisID:"yPercent",borderColor:"#42d8ff",backgroundColor:"#42d8ff",tension:.32},
+          {type:"line",label:"Cloud cover (%)",data:daily.cloud_cover_mean,yAxisID:"yPercent",borderColor:"#b55cff",backgroundColor:"#b55cff",tension:.32,borderDash:[5,4]},
+          {type:"bar",label:"Solar radiation (MJ/m²)",data:daily.shortwave_radiation_sum,yAxisID:"ySolar",backgroundColor:"rgba(255,204,102,.38)",borderColor:"#ffcc66",borderRadius:8}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:0,right:0,bottom:0,left:0}},interaction:{mode:"index",intersect:false},onHover:(event,active)=>handleChartBarHover("forecast",active),plugins:{legend:{fullSize:true,align:"start",labels:{color:chartTheme().text,usePointStyle:true,boxWidth:10,boxHeight:10,padding:16,font:{size:responsiveChartFont(12),weight:"600"}}},tooltip:{backgroundColor:chartTheme().tooltipBg,titleColor:chartTheme().tooltipText,bodyColor:chartTheme().tooltipText,borderColor:chartTheme().tooltipBorder,borderWidth:1,padding:10}},scales:{x:{offset:false,bounds:"ticks",ticks:{color:chartTheme().muted,maxRotation:0,autoSkip:false},grid:{display:false}},yTemp:{position:"left",ticks:{color:"#ff9bd8"},grid:{color:chartTheme().gridSoft}},yRain:{position:"right",beginAtZero:true,ticks:{color:"#a68fff"},grid:{drawOnChartArea:false}},yPercent:{display:false,min:0,max:100},ySolar:{display:false,beginAtZero:true}}}
+      });
+    }
+
+    function renderAir(values){
+      if(airChart) airChart.destroy();
+
+      // CO2 uses ppm while the others use µg/m³, so CO2 is plotted on a separate axis.
+      airChart=new Chart($("airChart"),{
+        data:{
+          labels:["CO₂","NO₂","PM₂.₅","PM₁₀"],
+          datasets:[
+            {
+              type:"bar",
+              label:"CO₂ (ppm)",
+              data:[values.co2,null,null,null],
+              yAxisID:"co2",
+              backgroundColor:"rgba(255,77,181,.60)",
+              borderColor:"#ff4db5",
+              borderRadius:10
+            },
+            {
+              type:"bar",
+              label:"NO₂ / PM (µg/m³)",
+              data:[null,values.no2,values.pm25,values.pm10],
+              yAxisID:"mass",
+              backgroundColor:["rgba(139,99,255,.60)","rgba(66,216,255,.60)","rgba(181,92,255,.60)"],
+              borderColor:["#8b63ff","#42d8ff","#b55cff"],
+              borderRadius:10
+            }
+          ]
+        },
+        options:{
+          responsive:true,maintainAspectRatio:false,
+          onHover:(event,active)=>handleChartBarHover("air",active),
+          plugins:{
+            legend:{display:false},
+            tooltip:{
+              backgroundColor:chartTheme().tooltipBg,
+              titleColor:chartTheme().tooltipText,
+              bodyColor:chartTheme().tooltipText,
+              borderColor:chartTheme().tooltipBorder,
+              borderWidth:1,
+              padding:10
+            }
+          },
+          scales:{
+            x:{ticks:{color:chartTheme().muted},grid:{display:false}},
+            co2:{
+              position:"left",
+              beginAtZero:false,
+              ticks:{color:"#ff8fd2"},
+              title:{display:true,text:"CO₂ ppm",color:"#ff8fd2"},
+              grid:{color:chartTheme().gridSoft}
+            },
+            mass:{
+              position:"right",
+              beginAtZero:true,
+              ticks:{color:"#9f8cff"},
+              title:{display:true,text:"µg/m³",color:"#9f8cff"},
+              grid:{drawOnChartArea:false}
+            }
+          }
+        }
+      });
+    }
+
+    async function reverseInfo(lat,lon){
+      try{
+        const url="https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&extratags=1&zoom=10&lat="
+          +encodeURIComponent(lat)+"&lon="+encodeURIComponent(lon);
+
+        const res=await fetch(url,{headers:{"Accept":"application/json"}});
+        if(!res.ok) throw new Error("reverse geocoding failed");
+        const j=await res.json();
+        const a=j.address||{};
+        const x=j.extratags||{};
+
+        const place=[a.city||a.town||a.village||a.county||a.state_district||a.state,a.state,a.country]
+          .filter((v,i,arr)=>v&&arr.indexOf(v)===i)
+          .join(", ");
+
+        return {
+          place:place||"Selected location",
+          district:a.state_district||a.county||a.city_district||a.district||"Not available",
+          state:a.state||a.region||"Not available",
+          country:a.country||"Not available",
+          population:x.population||x["population:date"]||null,
+          type:j.type||j.addresstype||"Best available"
+        };
+      }catch(_){
+        return {
+          place:"Selected location",
+          district:"Not available",
+          state:"Not available",
+          country:"Not available",
+          population:null,
+          type:"Best available"
+        };
+      }
+    }
+
+    async function elevationInfo(lat,lon){
+      try{
+        const res=await fetch("https://api.open-meteo.com/v1/elevation?latitude="+lat+"&longitude="+lon);
+        if(!res.ok) throw new Error("elevation failed");
+        const j=await res.json();
+        const e=Number(j.elevation?.[0]);
+        return Number.isFinite(e)?e:null;
+      }catch(_){return null}
+    }
+
+    async function airQuality(lat,lon){
+      try{
+        const url="https://air-quality-api.open-meteo.com/v1/air-quality?latitude="+lat+
+          "&longitude="+lon+
+          "&current=carbon_dioxide,nitrogen_dioxide,pm2_5,pm10&timezone=auto";
+
+        const res=await fetch(url);
+        if(!res.ok) throw new Error("air quality failed");
+        const j=await res.json();
+
+        const co2=Number(j.current?.carbon_dioxide);
+        const no2=Number(j.current?.nitrogen_dioxide);
+        const pm25=Number(j.current?.pm2_5);
+        const pm10=Number(j.current?.pm10);
+
+        return {
+          co2:Number.isFinite(co2)?co2:null,
+          no2:Number.isFinite(no2)?no2:null,
+          pm25:Number.isFinite(pm25)?pm25:null,
+          pm10:Number.isFinite(pm10)?pm10:null
+        };
+      }catch(_){
+        return {co2:null,no2:null,pm25:null,pm10:null};
+      }
+    }
+
+
+    function formatLocalClock(isoString, timeZone){
+      if(!isoString) return "Not available";
+      const d=new Date(isoString);
+      if(Number.isNaN(d.getTime())) return "Not available";
+      try{
+        return new Intl.DateTimeFormat("en-US",{
+          timeZone:timeZone||undefined,
+          hour:"numeric",minute:"2-digit",hour12:true
+        }).format(d);
+      }catch(_){
+        return d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",hour12:true});
+      }
+    }
+
+    function uvCategory(v){
+      if(!Number.isFinite(v)) return "Not available";
+      if(v<3) return "Low";
+      if(v<6) return "Moderate";
+      if(v<8) return "High";
+      if(v<11) return "Very high";
+      return "Extreme";
+    }
+
+    function dayLengthText(sunriseIso,sunsetIso){
+      const a=new Date(sunriseIso), b=new Date(sunsetIso);
+      if(Number.isNaN(a.getTime())||Number.isNaN(b.getTime())||b<=a) return {text:"Not available",hours:null};
+      const mins=Math.round((b-a)/60000);
+      return {text:Math.floor(mins/60)+" h "+String(mins%60).padStart(2,"0")+" min",hours:mins/60};
+    }
+
+    function moonPhaseLabel(phase){
+      if(!Number.isFinite(phase)) return "Not available";
+      if(phase < .03 || phase >= .97) return "New Moon";
+      if(phase < .22) return "Waxing Crescent";
+      if(phase < .28) return "First Quarter";
+      if(phase < .47) return "Waxing Gibbous";
+      if(phase < .53) return "Full Moon";
+      if(phase < .72) return "Waning Gibbous";
+      if(phase < .78) return "Last Quarter";
+      return "Waning Crescent";
+    }
+
+    function moonPhaseGlyph(phase){
+      if(!Number.isFinite(phase)) return "◐";
+      if(phase < .03 || phase >= .97) return "●";
+      if(phase < .22) return "☽";
+      if(phase < .28) return "◐";
+      if(phase < .47) return "◕";
+      if(phase < .53) return "○";
+      if(phase < .72) return "◕";
+      if(phase < .78) return "◑";
+      return "☾";
+    }
+
+    function updateAstronomy(lat,lon,weather){
+      const daily=weather?.daily||{};
+      const tz=weather?.timezone;
+      const sunrise=daily.sunrise?.[0]||null;
+      const sunset=daily.sunset?.[0]||null;
+      const uv=Number(daily.uv_index_max?.[0]);
+
+      ui.sunriseValue.textContent=formatLocalClock(sunrise,tz);
+      ui.sunsetValue.textContent=formatLocalClock(sunset,tz);
+      ui.uvValue.textContent=Number.isFinite(uv)?uv.toFixed(1):"Not available";
+      ui.uvCategory.textContent=Number.isFinite(uv)?uvCategory(uv):"--";
+
+      const dl=dayLengthText(sunrise,sunset);
+      ui.dayLengthValue.textContent=dl.text;
+      ui.dayLengthFill.style.width=Number.isFinite(dl.hours)?Math.max(0,Math.min(100,(dl.hours/24)*100))+"%":"0%";
+
+      const currentVisibility=Number(weather?.current?.visibility);
+      ui.visibilityValue.textContent=Number.isFinite(currentVisibility)?(currentVisibility/1000).toFixed(1)+" km":"Not available";
+
+      if(window.SunCalc){
+        try{
+          const localDate=(daily.time?.[0]||new Date().toISOString().slice(0,10));
+          const baseDate=new Date(localDate+"T12:00:00Z");
+          const illum=SunCalc.getMoonIllumination(baseDate);
+          const phase=Number(illum?.phase);
+          const fraction=Number(illum?.fraction);
+
+          ui.moonPhaseValue.textContent=moonPhaseLabel(phase);
+          ui.moonIlluminationValue.textContent=Number.isFinite(fraction)?Math.round(fraction*100)+"% illuminated":"-- illuminated";
+          ui.moonDisc.textContent=moonPhaseGlyph(phase);
+
+          const mt=SunCalc.getMoonTimes(baseDate,lat,lon,true);
+          ui.moonriseValue.textContent=mt?.rise instanceof Date && !Number.isNaN(mt.rise.getTime()) ? formatLocalClock(mt.rise.toISOString(),tz) : "Not available";
+          ui.moonsetValue.textContent=mt?.set instanceof Date && !Number.isNaN(mt.set.getTime()) ? formatLocalClock(mt.set.toISOString(),tz) : "Not available";
+        }catch(_){
+          ui.moonPhaseValue.textContent="Not available";
+          ui.moonIlluminationValue.textContent="-- illuminated";
+          ui.moonriseValue.textContent="Not available";
+          ui.moonsetValue.textContent="Not available";
+        }
+      }else{
+        ui.moonPhaseValue.textContent="Not available";
+        ui.moonIlluminationValue.textContent="Astronomy library unavailable";
+        ui.moonriseValue.textContent="Not available";
+        ui.moonsetValue.textContent="Not available";
+      }
+    }
+
+
+    // WorldPop population is independent of weather/geocoding requests.
+    const populationCache = new Map();
+    let populationController = null;
+    let populationPoint = null;
+    function populationPolygon(lat, lon) {
+      // Geodesic 1 km circle; split at the date line to keep GeoJSON valid.
+      const rad = Math.PI/180, phi = lat*rad, lambda = lon*rad, d = 1/6371.0088;
+      const ring = [];
+      for (let i=0;i<64;i++) {
+        const b=i*2*Math.PI/64;
+        const p=Math.asin(Math.sin(phi)*Math.cos(d)+Math.cos(phi)*Math.sin(d)*Math.cos(b));
+        let l=(lambda+Math.atan2(Math.sin(b)*Math.sin(d)*Math.cos(phi),Math.cos(d)-Math.sin(phi)*Math.sin(p)))/rad;
+        l += 360*Math.round((lon-l)/360);
+        ring.push([l,p/rad]);
+      }
+      function clip(points, boundary, keepLess) {
+        const out=[];
+        for(let i=0;i<points.length;i++) {
+          const a=points[i],b=points[(i+1)%points.length];
+          const ai=keepLess?a[0]<=boundary:a[0]>=boundary;
+          const bi=keepLess?b[0]<=boundary:b[0]>=boundary;
+          if(ai) out.push(a);
+          if(ai!==bi) out.push([boundary,a[1]+(b[1]-a[1])*(boundary-a[0])/(b[0]-a[0])]);
+        }
+        return out;
+      }
+      const parts=[];
+      for(const shift of [-360,0,360]) {
+        let part=ring.map(([x,y])=>[x+shift,y]);
+        part=clip(clip(part,-180,false),180,true);
+        if(part.length>=3) {part.push(part[0]);parts.push([part]);}
+      }
+      return parts.length===1?{type:'Polygon',coordinates:parts[0]}:{type:'MultiPolygon',coordinates:parts};
+    }
+    async function loadWorldPop(lat,lon) {
+      populationPoint=[lat,lon];
+      populationController?.abort();
+      const controller=new AbortController();
+      populationController=controller;
+      const signal=controller.signal;
+      const year=Number(document.getElementById('populationYear').value);
+      const value=document.getElementById('populationValue');
+      const density=document.getElementById('populationDensity');
+      const source=document.getElementById('populationSource');
+      value.textContent='Loading…';density.textContent='Density: —';
+      source.textContent='WorldPop · '+year+' · 100 m · modelled estimate'+(year>new Date().getFullYear()?' (projection)':'');
+      const timeout=setTimeout(()=>controller.abort(),60000);
+      const pause=()=>new Promise((resolve,reject)=>{
+        const abort=()=>{clearTimeout(timer);reject(new Error('cancelled'));};
+        const timer=setTimeout(()=>{signal.removeEventListener('abort',abort);resolve();},1200);
+        signal.addEventListener('abort',abort,{once:true});
+        if(signal.aborted) abort();
+      });
+      async function json(url,options={}) {
+        const r=await fetch(url,{...options,signal});
+        if(!r.ok) throw new Error(r.status===429?'Request limit reached. Try later.':'WorldPop unavailable (HTTP '+r.status+').');
+        return r.json();
+      }
+      try {
+        if(!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>89.98) throw new Error('Population unavailable at this polar location.');
+        lon=((lon+180)%360+360)%360-180;
+        const key=[lat.toFixed(5),lon.toFixed(5),year].join(':');
+        let result=populationCache.get(key);
+        if(!result) {
+          const task=await json('https://api.worldpop.org/v2/population',{
+            method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({geojson:populationPolygon(lat,lon),year,resolution:'100m'})
+          });
+          if(!task.task_id) throw new Error('WorldPop returned no task ID.');
+          for(let attempt=0;attempt<40;attempt++) {
+            await pause();
+            const state=await json('https://api.worldpop.org/v2/tasks/'+encodeURIComponent(task.task_id));
+            if(state.status==='success') {result=state.result;break;}
+            if(['failure','failed','error'].includes(state.status)) throw new Error('WorldPop could not calculate this area.');
+          }
+          if(!result) throw new Error('WorldPop timed out. Retry by selecting the point again.');
+          if(typeof result.total_population!=='number'||!Number.isFinite(result.total_population)||result.total_population<0||typeof result.area_km2!=='number'||!Number.isFinite(result.area_km2)||result.area_km2<=0) throw new Error('WorldPop returned incomplete data.');
+          populationCache.set(key,result);
+          if(populationCache.size>100) populationCache.delete(populationCache.keys().next().value);
+        }
+        if(signal.aborted||populationController!==controller) return;
+        value.textContent=new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(result.total_population)+' people';
+        const perKm2=result.total_population/result.area_km2;
+        density.textContent=new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(perKm2)+' people/km²';
+        source.textContent+=' · area '+result.area_km2.toFixed(2)+' km²';
+      } catch(error) {
+        if(populationController!==controller) return;
+        value.textContent='Not available';density.textContent='Density: —';
+        source.textContent=signal.aborted?'WorldPop timed out. Select the point again to retry.':error.message;
+      } finally {clearTimeout(timeout);}
+    }
+    document.getElementById('populationYear').addEventListener('change',()=>{
+      if(populationPoint) loadWorldPop(...populationPoint);
+    });
+
+    async function loadPoint(lat,lon){
+      tak(1);
+      loadWorldPop(lat,lon);
+
+      ui.mapState.textContent="Loading…";
+      ui.mapState.classList.add("loading");
+      ui.statusText.textContent="Loading weather, air quality, astronomy, altitude and administrative information…";
+      ui.coords.textContent=lat.toFixed(4)+"°N, "+lon.toFixed(4)+"°E";
+      ui.placeName.textContent="Finding location…";
+
+      if(!marker){
+        marker=L.circleMarker([lat,lon],{
+          radius:8,color:"#fff",weight:2,fillColor:"#ff3cac",fillOpacity:.95
+        }).addTo(map);
+      }else{
+        marker.setLatLng([lat,lon]);
+      }
+
+      const end=new Date();
+      end.setUTCDate(end.getUTCDate()-6);
+      const start=new Date(end);
+      start.setUTCDate(start.getUTCDate()-370);
+
+      const weatherUrl="https://api.open-meteo.com/v1/forecast?latitude="+lat+
+        "&longitude="+lon+
+        "&current=temperature_2m,precipitation,relative_humidity_2m,shortwave_radiation,wind_speed_10m,wind_direction_10m,visibility"+
+        "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,relative_humidity_2m_mean,cloud_cover_mean,shortwave_radiation_sum,sunrise,sunset,uv_index_max"+
+        "&forecast_days=7&timezone=auto";
+
+      const archiveUrl="https://archive-api.open-meteo.com/v1/archive?latitude="+lat+
+        "&longitude="+lon+
+        "&start_date="+iso(start)+
+        "&end_date="+iso(end)+
+        "&daily=temperature_2m_mean,precipitation_sum,relative_humidity_2m_mean,shortwave_radiation_sum&timezone=auto";
+
+      try{
+        const [wRes,aRes,admin,elev,air]=await Promise.all([
+          fetch(weatherUrl),
+          fetch(archiveUrl),
+          reverseInfo(lat,lon),
+          elevationInfo(lat,lon),
+          airQuality(lat,lon)
+        ]);
+
+        if(!wRes.ok||!aRes.ok) throw new Error("weather failed");
+
+        const w=await wRes.json();
+        const a=await aRes.json();
+
+        const t=Number(w.current?.temperature_2m);
+        const p=Number(w.current?.precipitation);
+
+        if(!Number.isFinite(t)||!Number.isFinite(p)||!w.daily||!a.daily){
+          throw new Error("incomplete weather");
+        }
+
+        setBars(t,p);
+        const humidity=Number(w.current?.relative_humidity_2m), solar=Number(w.current?.shortwave_radiation), windSpeed=Number(w.current?.wind_speed_10m), windDir=Number(w.current?.wind_direction_10m);
+        ui.currentHumidity.textContent=Number.isFinite(humidity)?humidity.toFixed(0)+" %":"Not available";
+        ui.currentSolar.textContent=Number.isFinite(solar)?solar.toFixed(0)+" W/m²":"Not available";
+        windDialState={speed:Number.isFinite(windSpeed)?windSpeed:null,direction:Number.isFinite(windDir)?windDir:null};
+        ui.windSpeedValue.textContent=Number.isFinite(windSpeed)?windSpeed.toFixed(1)+" km/h":"Not available";
+        ui.windDirectionValue.textContent=Number.isFinite(windDir)?Math.round(windDir)+"° "+windCardinal(windDir):"Not available";
+        drawWindDial();
+        renderMonthly(aggregateMonthly(a.daily));
+        initMonthlyWeatherInteractions();
+        renderForecast(w.daily);
+        updateAstronomy(lat,lon,w);
+
+        ui.placeName.textContent=admin.place;
+        ui.districtValue.textContent=admin.district;
+        ui.stateValue.textContent=admin.state;
+        ui.countryValue.textContent=admin.country;
+        ui.adminValue.textContent=admin.type;
+
+        ui.elevationValue.textContent=elev===null ? "Not available" : Math.round(elev)+" m";
+
+        ui.co2Value.textContent=air.co2===null?"Not available":air.co2.toFixed(1)+" ppm";
+        ui.no2Value.textContent=air.no2===null?"Not available":air.no2.toFixed(1)+" µg/m³";
+        ui.pm25Value.textContent=air.pm25===null?"Not available":air.pm25.toFixed(1)+" µg/m³";
+        ui.pm10Value.textContent=air.pm10===null?"Not available":air.pm10.toFixed(1)+" µg/m³";
+
+        const allAir=[air.co2,air.no2,air.pm25,air.pm10].every(v=>v!==null);
+        if(allAir){
+          renderAir(air);
+          ui.airState.textContent="Live model data";
+        }else{
+          ui.airState.textContent="Partly unavailable";
+          if(airChart){airChart.destroy();airChart=null}
+        }
+
+        ui.mapState.textContent="Live";
+        ui.forecastState.textContent="Open-Meteo";
+        ui.statusText.textContent="All available point data loaded. WorldPop population loads independently in its own card.";
+      }catch(err){
+        console.error(err);
+        ui.mapState.textContent="Data error";
+        ui.statusText.textContent="The map is working, but one or more data services could not be reached. Try another point or refresh.";
+      }finally{
+        ui.mapState.classList.remove("loading");
+      }
+    }
+
+    map.on("click",e=>loadPoint(e.latlng.lat,e.latlng.lng));
+    map.on("zoomstart",()=>tak(.5));
+    map.on("dragstart",()=>tak(.35));
+
+
+    function applyTheme(theme){
+      const isLight = theme === "light";
+      document.body.classList.toggle("light-theme", isLight);
+      ui.themeBtn.textContent = isLight ? "🌙 Dark Mode" : "☀️ Light Mode";
+      ui.themeBtn.setAttribute("aria-pressed", String(isLight));
+      setTimeout(refreshChartThemes,0);
+      try{ localStorage.setItem("environment-explorer-theme", theme); }catch(_){}
+    }
+
+    let savedTheme = "dark";
+    try{
+      const stored = localStorage.getItem("environment-explorer-theme");
+      if(stored === "light" || stored === "dark") savedTheme = stored;
+    }catch(_){}
+    applyTheme(savedTheme);
+
+
+    ["tempBar","rainBar"].forEach((id)=>{
+      const bar=$(id);
+      const track=bar && bar.parentElement;
+      if(track){
+        track.addEventListener("pointerenter",()=>legoClick(.78));
+      }
+    });
+
+    ui.themeBtn.addEventListener("click",()=>{
+      const next = document.body.classList.contains("light-theme") ? "dark" : "light";
+      applyTheme(next);
+    });
+
+    ui.soundBtn.addEventListener("click",()=>{
+      ensureAudio();
+      soundOn=!soundOn;
+      ui.soundBtn.textContent=soundOn?"🔊 Interaction Sound":"🔇 Sound Muted";
+      ui.soundBtn.setAttribute("aria-pressed",String(soundOn));
+      if(soundOn) tak(1);
+    });
+
+
+    $("downloadMonthly").addEventListener("click",()=>downloadCanvas($("monthlyWeatherCanvas"),"annual-weather-profile.png"));
+    $("downloadAir").addEventListener("click",()=>downloadChart(airChart,"air-quality-profile.png"));
+    $("downloadWind").addEventListener("click",()=>downloadCanvas($("windDial"),"wind-conditions.png"));
+    $("downloadForecast").addEventListener("click",()=>downloadChart(forecastChart,"seven-day-weather-forecast.png"));
+
+    ui.indiaBtn.addEventListener("click",()=>{
+      ensureAudio(); tak(.8);
+      map.setView(INDIA_CENTER,2,{animate:true});
+    });
+
+    document.addEventListener("pointerdown",ensureAudio,{once:true});
+    setTimeout(()=>map.invalidateSize(),150);
+    window.addEventListener("resize",()=>{map.invalidateSize();if(monthlyWeatherData)drawMonthlyWeather(1);drawWindDial();});
+
+    loadPoint(DELHI[0],DELHI[1]);
+  </script>
+</body>
+</html>
