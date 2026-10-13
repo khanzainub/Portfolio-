@@ -1431,6 +1431,71 @@
 .project-status{font-size:.76rem;font-weight:600;color:var(--green-dark);margin-bottom:16px}
 .methods-grid{display:grid;gap:28px}.method-group h3{font-size:1rem;color:var(--navy);margin-bottom:12px}
 @media(max-width:760px){.research-grid,.project-grid{grid-template-columns:1fr}.project-featured{grid-column:auto}.project-grid .project-card:last-child{min-height:auto}.project-card{min-height:auto}}
+
+    /* Phone layout */
+    @media (max-width:760px){
+      .container{width:min(92%,560px)}
+      .nav-inner{min-height:64px;gap:12px}
+      .nav-links{top:64px}
+      .brand{font-size:.84rem}
+      .hero{padding:44px 0 48px}
+      .hero-grid{grid-template-columns:1fr;gap:28px}
+      .hero h1{font-size:clamp(2.5rem,10vw,3.3rem);margin-bottom:12px}
+      .hero-role{font-size:1rem;line-height:1.45;margin-bottom:12px}
+      .hero-intro{font-size:.96rem;line-height:1.6}
+      .eyebrow{margin-bottom:12px}
+      .hero-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:22px}
+      .hero-links .button{width:100%;min-height:44px;padding:9px 11px;text-align:center;font-size:.78rem}
+      .hero-links .button:first-child{grid-column:1/-1}
+      .profile-panel{width:100%;max-width:none;display:grid;grid-template-columns:112px minmax(0,1fr);column-gap:18px;align-items:start}
+      .profile-portrait{width:112px;height:136px;max-height:none;object-fit:cover;margin:0;grid-row:1/3}
+      .profile-panel-title{margin:0 0 8px;align-self:end}
+      .academic-links{gap:6px;align-content:start}
+      .academic-links a{min-height:34px;padding:5px 8px;font-size:.72rem}
+      section.content-section{padding:50px 0}
+      .section-heading{grid-template-columns:1fr;gap:10px;margin-bottom:24px}
+      .section-heading h2{font-size:clamp(2rem,8vw,2.65rem)}
+      .section-heading p{font-size:.94rem;padding-top:0}
+      .section-kicker{margin-bottom:7px}
+      .about-grid{grid-template-columns:1fr;gap:0}
+      .about-grid p{font-size:.95rem;line-height:1.65;margin-bottom:12px}
+      .research-grid,.project-grid,.fellowship-grid,.media-grid{grid-template-columns:1fr}
+      .research-item{min-height:0;padding:21px}
+      .research-number{margin-bottom:8px}
+      .research-item h3{margin-bottom:6px}
+      .project-grid{gap:14px}
+      .project-card,.project-grid .project-card:last-child,.project-grid .project-card.project-spatialforecast{grid-column:auto;min-height:0;padding:22px}
+      .project-card h3{font-size:1.65rem;margin-bottom:9px}
+      .project-type{margin-bottom:10px;line-height:1.5}
+      .project-status{margin-bottom:10px}
+      .project-card p{flex:none;line-height:1.6}
+      .project-meta{margin:16px 0 15px}
+      .media-grid,.fellowship-grid{gap:14px}
+      .media-card{min-height:0;padding:22px}
+      .media-source{gap:10px;margin-bottom:16px;flex-wrap:wrap}
+      .media-card h3{margin-bottom:10px}
+      .media-card p{margin-bottom:17px}
+      .fellowship-card,.fellowship-card:last-child{grid-column:auto;min-height:0;padding:22px}
+      .fellowship-year{margin-bottom:12px}
+      .fellowship-card h3{margin-bottom:8px}
+      .publication-item{padding:17px;gap:10px}
+      .publication-title{font-size:.9rem}
+      .publication-meta{font-size:.76rem}
+      .experience-list{padding-left:25px}
+      .experience-item{padding-bottom:28px}
+      .experience-item::before{left:-31px}
+      .methods-grid{gap:22px}
+      .skills{gap:7px}
+      .contact-panel{grid-template-columns:1fr;gap:28px}
+      .contact-section h2{font-size:clamp(2.25rem,9vw,3rem)}
+      .footer-inner{font-size:.72rem;line-height:1.6}
+    }
+    @media (max-width:360px){
+      .profile-panel{grid-template-columns:88px minmax(0,1fr);column-gap:13px}
+      .profile-portrait{width:88px;height:118px}
+      .academic-links a{font-size:.68rem}
+    }
+
 </style>
 </head>
 
