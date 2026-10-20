@@ -1777,6 +1777,50 @@
       main .hero-links .button:first-child{grid-column:1/-1}
     }
 
+
+    /* On phones, keep the hero clear and put research profiles beside Contact. */
+    .contact-academic{display:none}
+    @media (max-width:760px){
+      main .hero-links,
+      main .hero .profile-panel-title,
+      main .hero .academic-links{display:none}
+      main .hero-role{font-size:.88rem;line-height:1.42}
+      main .hero{padding:23px 0 22px}
+
+      main .contact-academic{
+        display:block;
+        margin-top:20px;
+        padding-top:16px;
+        border-top:1px solid rgba(255,255,255,.2);
+      }
+      main .contact-academic-heading{
+        margin-bottom:9px;
+        color:#9ac5bd;
+        font-size:var(--phone-label,.72rem);
+        font-weight:700;
+        letter-spacing:.12em;
+        text-transform:uppercase;
+      }
+      main .contact-academic .academic-links{
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:7px;
+        min-width:0;
+      }
+      main .contact-academic .academic-links a{
+        min-width:0;
+        width:100%;
+        padding:7px 9px;
+        min-height:35px;
+        justify-content:space-between;
+        font-size:.72rem;
+        white-space:normal;
+      }
+    }
+    @media (max-width:600px){
+      main .hero{padding:14px 0 16px}
+    }
+
 </style>
 </head>
 
@@ -2390,6 +2434,16 @@
 
       </div>
 
+    </div>
+
+    <div class="contact-academic" aria-label="Academic and professional profiles">
+      <div class="contact-academic-heading">Find my work</div>
+      <div class="academic-links">
+        <a href="https://scholar.google.com/citations?user=ECIJQ9cAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Google Scholar <span aria-hidden="true">↗</span></a>
+        <a href="https://www.researchgate.net/profile/Zainab-Khan-7" target="_blank" rel="noopener noreferrer">ResearchGate <span aria-hidden="true">↗</span></a>
+        <a href="https://in.linkedin.com/in/zainab-khan-797325b9" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+        <a href="https://orcid.org/0000-0002-6072-521X" target="_blank" rel="noopener noreferrer">ORCID <span aria-hidden="true">↗</span></a>
+      </div>
     </div>
 
   </div>
