@@ -1496,6 +1496,119 @@
       .academic-links a{font-size:.68rem}
     }
 
+
+    /* Compact mobile hero: only narrow screens; desktop remains untouched. */
+    @media (max-width:600px){
+      .nav-inner{min-height:58px}
+      .nav-links{top:58px}
+      .brand{font-size:.8rem}
+      .brand-mark{width:6px;height:26px}
+      .menu-button{width:36px;height:36px;font-size:1.1rem}
+
+      .hero{padding:25px 0 31px}
+      .hero-grid{
+        display:grid;
+        grid-template-columns:minmax(0,1fr) 104px;
+        column-gap:14px;
+        row-gap:8px;
+        align-items:start;
+      }
+      .hero-copy,.profile-panel{display:contents}
+
+      .eyebrow{
+        grid-column:1/-1;
+        grid-row:1;
+        margin:0 0 5px;
+        font-size:.64rem;
+        letter-spacing:.14em;
+      }
+      .hero h1{
+        grid-column:1;
+        grid-row:2;
+        min-width:0;
+        align-self:end;
+        margin:0;
+        font-size:clamp(1.84rem,8.2vw,2.2rem);
+        line-height:1.06;
+        letter-spacing:-.03em;
+      }
+      .hero-role{
+        grid-column:1;
+        grid-row:3;
+        margin:0;
+        font-size:.85rem;
+        line-height:1.43;
+      }
+      .profile-portrait{
+        grid-column:2;
+        grid-row:2 / span 2;
+        justify-self:end;
+        width:104px;
+        height:132px;
+        max-height:none;
+        margin:0;
+        object-fit:cover;
+        object-position:center 32%;
+        border-radius:6px;
+      }
+      .hero-intro{
+        grid-column:1/-1;
+        grid-row:4;
+        max-width:none;
+        margin-top:6px;
+        font-size:.87rem;
+        line-height:1.56;
+      }
+      .hero-links{
+        grid-column:1/-1;
+        grid-row:5;
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:7px;
+        margin-top:12px;
+      }
+      .hero-links .button{
+        width:100%;
+        min-height:36px;
+        padding:7px 10px;
+        font-size:.74rem;
+        line-height:1.35;
+        font-weight:600;
+      }
+      .hero-links .button:first-child{grid-column:1/-1}
+      .profile-panel-title{
+        grid-column:1/-1;
+        grid-row:6;
+        margin:12px 0 0;
+        font-size:.65rem;
+        line-height:1.3;
+        letter-spacing:.13em;
+      }
+      .academic-links{
+        grid-column:1/-1;
+        grid-row:7;
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:6px;
+      }
+      .academic-links a{
+        width:100%;
+        min-height:31px;
+        justify-content:space-between;
+        padding:5px 10px;
+        font-size:.72rem;
+        line-height:1.3;
+      }
+    }
+    @media (max-width:360px){
+      .hero-grid{grid-template-columns:minmax(0,1fr) 88px;column-gap:11px}
+      .hero h1{font-size:1.78rem}
+      .hero-role{font-size:.78rem}
+      .profile-portrait{width:88px;height:118px}
+      .hero-intro{font-size:.84rem}
+      .academic-links a{font-size:.68rem;padding-inline:8px}
+    }
+
 </style>
 </head>
 
