@@ -1678,6 +1678,105 @@
       #about .about-grid p,#about .section-heading p{font-size:.81rem}
     }
 
+
+    /* Consistent phone typography scale across portfolio; desktops untouched. */
+    @media (max-width:760px){
+      :root{
+        --phone-title:clamp(1.6rem, 8vw, 1.95rem);
+        --phone-card-title:1.14rem;
+        --phone-subtitle:1rem;
+        --phone-body:.84rem;
+        --phone-label:.72rem;
+      }
+
+      /* Same top-level heading size for the hero and every named section. */
+      main .hero h1,
+      main .section-heading h2,
+      main #about .section-heading h2,
+      main .contact-section h2{
+        font-size:var(--phone-title);
+        line-height:1.13;
+      }
+
+      /* Same smaller tier for research/project/media/publication card headings. */
+      main .research-item h3,
+      main .project-card h3,
+      main .media-card h3,
+      main .fellowship-card h3,
+      main .experience-item h3,
+      main .method-group h3,
+      main .publication-title{
+        font-size:var(--phone-card-title);
+        line-height:1.3;
+      }
+
+      main .hero-role{
+        font-size:var(--phone-subtitle);
+        line-height:1.4;
+      }
+
+      /* About body font size is the reference for all descriptive text. */
+      main .hero-intro,
+      main .section-heading p,
+      main .about-grid p,
+      main .research-item p,
+      main .project-card p,
+      main .media-card p,
+      main .fellowship-card p,
+      main .experience-item p,
+      main .contact-section p,
+      main #about .section-heading p,
+      main #about .about-grid p{
+        font-size:var(--phone-body);
+        line-height:1.55;
+        text-align:left;
+        hyphens:none;
+      }
+
+      main .section-kicker,
+      main .profile-panel-title,
+      main .project-type,
+      main .project-status,
+      main .research-number,
+      main .fellowship-year,
+      main .publication-meta,
+      main .experience-label,
+      main .media-date,
+      main .meta-chip,
+      main .skill{
+        font-size:var(--phone-label);
+      }
+
+      /* Even rhythm: reduce oversized gaps without disturbing section layouts. */
+      section.content-section{padding:38px 0}
+      section.content-section#about{padding:28px 0 30px}
+      main .section-heading{gap:10px;margin-bottom:19px}
+      main #about .section-heading{margin-bottom:17px}
+      main .section-kicker{margin-bottom:6px}
+      main .project-grid,
+      main .media-grid,
+      main .fellowship-grid{gap:12px}
+      main .research-item,
+      main .project-card,
+      main .media-card,
+      main .fellowship-card{padding:20px}
+      main .experience-item{padding-bottom:24px}
+      main .methods-grid{gap:18px}
+
+      /* Prevent inherited column-flex from stacking all hero actions. */
+      main .hero-links{
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:6px;
+      }
+      main .hero-links .button{
+        width:100%;
+        min-width:0;
+        min-height:30px;
+      }
+      main .hero-links .button:first-child{grid-column:1/-1}
+    }
+
 </style>
 </head>
 
