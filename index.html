@@ -1844,33 +1844,53 @@
     .portrait-crop{width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:8px;margin-bottom:22px;background:#274e38}
     .portrait-crop .profile-portrait{display:block;width:123.7%;height:123.7%;max-width:none;max-height:none;object-fit:cover;object-position:center;transform:translate(-15.2%,-8.2%);border-radius:0;margin:0}
 
-    /* Fix mobile hero: prominent 1:1 portrait, no empty grid row, readable stacked introduction. */
+    /* Mobile hero: portrait beside heading and role; introduction underneath. Desktop untouched. */
     @media (max-width:600px){
-      main .hero{padding:22px 0 28px}
+      main .hero{padding:20px 0 25px}
       main .hero-grid{
         display:grid;
         width:min(92%,560px);
         max-width:560px;
-        grid-template-columns:minmax(0,1fr);
-        grid-template-rows:auto auto auto auto;
-        column-gap:0;
-        row-gap:0;
+        margin-inline:auto;
+        grid-template-columns:minmax(0,1fr) clamp(126px,38vw,164px);
+        grid-template-rows:auto auto auto;
+        gap:5px 13px;
         align-items:start;
       }
       main .hero-copy, main .hero .profile-panel{display:contents}
       main .hero .eyebrow{display:none}
-      main .hero .portrait-crop{
+      main .hero h1{
         grid-column:1;
         grid-row:1;
-        width:min(74vw,300px);
-        max-width:100%;
-        aspect-ratio:1 / 1;
-        height:auto;
-        justify-self:center;
+        align-self:end;
+        justify-self:start;
+        font-size:clamp(1.6rem,6.8vw,2rem);
+        line-height:1.1;
+        margin:0 0 6px;
+        min-width:0;
+      }
+      main .hero .hero-role{
+        grid-column:1;
+        grid-row:2;
         align-self:start;
-        margin:0 0 22px;
-        border-radius:10px;
+        font-size:clamp(.84rem,3.6vw,.97rem);
+        line-height:1.38;
+        margin:0;
+        min-width:0;
+      }
+      main .hero .portrait-crop{
+        grid-column:2;
+        grid-row:1 / span 2;
+        justify-self:end;
+        align-self:start;
+        width:100%;
+        height:auto;
+        aspect-ratio:1/1;
+        max-width:none;
+        margin:0;
+        border-radius:8px;
         overflow:hidden;
+        background:#274e38;
       }
       main .hero .portrait-crop .profile-portrait{
         display:block;
@@ -1883,35 +1903,24 @@
         margin:0;
         border-radius:0;
       }
-      main .hero h1{
-        grid-column:1;
-        grid-row:2;
-        align-self:start;
-        justify-self:stretch;
-        font-size:clamp(2rem,9vw,2.55rem);
-        line-height:1.12;
-        margin:0 0 8px;
-        white-space:normal;
-      }
-      main .hero .hero-role{
-        grid-column:1;
-        grid-row:3;
-        margin:0 0 14px;
-        font-size:1rem;
-        line-height:1.43;
-      }
       main .hero .hero-intro{
-        grid-column:1;
-        grid-row:4;
-        margin:0;
+        grid-column:1/-1;
+        grid-row:3;
+        margin:13px 0 0;
         font-size:.91rem;
         line-height:1.55;
-        max-width:100%;
         text-align:left;
+        max-width:100%;
+        min-width:0;
       }
       main .hero .hero-links,
       main .hero .profile-panel-title,
       main .hero .academic-links{display:none}
+    }
+    @media (max-width:360px){
+      main .hero-grid{grid-template-columns:minmax(0,1fr) 118px;column-gap:10px}
+      main .hero h1{font-size:1.53rem}
+      main .hero .hero-role{font-size:.82rem}
     }
 </style>
 </head>
