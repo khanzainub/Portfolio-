@@ -1,8 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
-  <title>Two-leaf environmental sapling</title>
-  <rect width="96" height="96" rx="20" fill="#194B38"/>
-  <path d="M48 75C49 64 48 53 48 43" fill="none" stroke="#F6FFF5" stroke-width="6.5" stroke-linecap="round"/>
-  <path d="M47 57C31 59 20 49 18 35C33 33 46 40 49 54Z" fill="#B9DDB7"/>
-  <path d="M47 47C49 29 63 23 79 26C77 44 65 51 49 51Z" fill="#F6FFF5"/>
-  <path d="M37 77H59" fill="none" stroke="#F6FFF5" stroke-width="5" stroke-linecap="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><title>Zainab Khan — environmental research</title><rect width="64" height="64" rx="14" fill="#194b38"/><path d="M19 18H46V24L27 41H46V47H18V41L37 24H19Z" fill="#e4f0e2"/></svg>
